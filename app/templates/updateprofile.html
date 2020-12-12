@@ -28,85 +28,68 @@
           <div class="card">
           <img class="img"src="img/default.jpg" width="200" height="200" alt="John">
           <br>
-          <h1>John Doe</h1>
-          <p>@username</p>
-          <p>Male</p>
-          <p><button>Edit Profile</button></p>
+          <center>
+            <p><button>Edit Profile</button></p>
+          </center>
+          
         </div> 
         </ul> 
         </div>
         <div class="main_content">
           <form class="main">
-             <div class="form-group">
-                                            <label>First Name:</label>
-                                            <input type="text" class="form-control" name="fname" value="{{row.2}}">
-                                        </div>
-
-
-                                        <div class="form-group">
-                                            <label>Last Name:</label>
-                                            <input type="text" class="form-control" name="lname" value="{{row.3}}">
-                                        </div>
-
-
-                                        <div class="form-group">
-                                            <label>Gender:</label>
-                                            <select name="gender" class="form-control">
-                                                {%if row[5] == "Male" %}
-                                                <option value="Male"selected>Male</option>
-                                                <option value="Female">Female</option>
-                                                {%elif row[5] == "Female" %}
-                                                <option value ="Female"selected>Female</option>
-                                                <option value="Male">Male</option>
-                                                {%else%}
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                                {%endif%}
-                                             </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Year Level:</label>
-                                            <input type="number" min="0" max="4" class="form-control" name="yrlvl" value="{{row.6}}">
-                                        </div>
-
-
-                                        <div class="form-group">
-                                            <label>College:</label>
-                                            <select name="college" class="form-control" required="1">
-                                                <option disabled selected> — Select — </option>
-                                                {% for colleges in college %}
-                                                <option value="{{colleges[0]}}"> {{colleges[1]}} </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Department:</label>
-                                            <select name="department" class="form-control" required="1">
-                                                <option disabled selected> — Select — </option>
-                                                {% for depts in dept %}
-                                                <option value="{{depts[0]}}"> {{depts[1]}} </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label>Course:</label>
-                                            <select name="course" class="form-control" required="1">
-                                                <option disabled selected> — Select — </option>
-                                                {% for courses in course %}
-                                                <option value="{{courses[0]}}"> {{courses[1]}} </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-
-                                        <div class="form-group">
-                                            <button class="btn btn-primary" type="submit">Save</button>
-                                        </div>
-                                    </form>
-                                </div>
+            <div class="container pt-4">
+      <div id="formContainer" class=" p-5 my-3 rounded border shadow-lg mb-5 bg-default" style="width: 700px; height: 700px;">
+         <form action="{{url_for('insertAccountAndProfile')}}" method="POST">
+           <div class="form-row">
+             <div class="col-6 mt-3">
+               <label for="firstName">First Name</label>
+               <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Enter First name" required="1">
+             </div>
+             <div class="col-6 mt-3">
+               <label for="lastName">Last Name</label>
+               <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Enter Last name" required="1">
+             </div>
+             <div class="col-6 mt-3">
+                <label for="gender">Gender</label>
+                <select class="custom-select mr-sm-2" id="gender" name="gender">
+                  <option disabled selected>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+             <div class="col-6 mt-3">
+                <label for="accountType">Account Type</label>
+                <select class="custom-select mr-sm-2" id="accountType" name="accountType">
+                  <option disabled selected>Select account type</option>
+                  <option value="Renter">Renter</option>
+                  <option value="Owner">Owner</option>
+                </select>
+             </div>
+              <div class="col-6 mt-3">
+               <label for="username">User Name</label>
+               <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="1">
+             </div>
+            <div class="col-6 mt-3">
+                <label for="birthdate">Birthdate</label>
+                <input type="date" id="birthDate" name="birthDate" class="form-control" placeholder="Enter Birthday" required="1">
+            </div>
+            <div class="col-12 mt-3">
+               <label for="email">Email</label>
+               <input type="email" id="email" name="email" class="form-control" placeholder=" Enter Email Address" required="1">
+             </div>
+             <div class="col-12 mt-3">
+               <label for="password">Password</label>
+               <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" required="1">
+             </div>
+           </div>
+           <br>
+           <div align="center">
+           <button type="submit">Submit</button>
+           </div>
+         </form>  
+      </div>
+   </div>
+         </form> 
           </form>
         </div>
       </form>
