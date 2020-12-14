@@ -17,6 +17,7 @@ def signin():
 def insertAccountAndProfile():
 	if request.method == "POST":
 		usernameVar = request.form['username']
+		accountType = request.form['accountType']
 		newAccount = accounts.account(username=usernameVar,email=request.form['email'],password=request.form['password'],accountType=request.form['accountType'])
 		if newAccount.search(usernameVar)==True:
 			return render_template("signup.html",title="Signup to Panimalay",username=usernameVar,email=request.form['email'],password=request.form['password'],accountType=request.form['accountType'],
@@ -25,7 +26,7 @@ def insertAccountAndProfile():
 		else:
 			newProfile = profiles.profile(username=usernameVar,firstName=request.form['firstName'],lastName=request.form['lastName'],birthDate=request.form['birthDate'],gender=request.form['gender'])
 			newAccount.addAccount()
-			newProfile.addProfile()
+			newProfile.addProfile(accountType)
 			return redirect(url_for('signup'))
 
 @app.route("/login",methods=['POST','GET'])

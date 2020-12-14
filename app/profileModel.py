@@ -9,13 +9,19 @@ class profile():
 		self.birthDate = birthDate
 		self.gender = gender
 
-	def addProfile(self):
+	def addProfile(self,accountType):
 		cur = mysql.connection.cursor()
 		flag = 0
 		while flag==0:
-			randomstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-			prefix= 'RENTER'
-			profileID = prefix+randomstr
+			if accountType=='RENTER':
+				randomstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+				prefix= 'RENTER'
+				profileID = prefix+randomstr
+			else:
+				randomstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(11))
+				prefix= 'OWNER'
+				profileID = prefix+randomstr
+
 			cur.execute("SELECT * FROM profiles WHERE profileID=%s",(profileID,))
 			result = cur.fetchall()
 			if len(result)!=0:
