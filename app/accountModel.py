@@ -15,19 +15,8 @@ class account():
 			return True
 		else:
 			return False
-	@classmethod
-	def searchForLogin(cls,emailOrUsername,password):
-		cur = mysql.connection.cursor()
-		cur.execute("SELECT * FROM accounts WHERE username=%s",(emailOrUsername,))
-		result = cur.fetchone()
-		if result is not None and len(result)!=0:
-			if password==result[2]:
-				return True
-			else:
-				return "Invalid password!"
-		else:
-			return "Invalid email or password!"
-			
+
+
 	def addAccount(self):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM accounts")

@@ -9,10 +9,6 @@ import app.profileModel as profiles
 def signup():
 	return render_template("signup.html",title="Signup to Panimalay")
 
-@app.route("/signin")
-def signin():
-	return render_template("signin.html",title="Signin to Panimalay")
-
 @app.route("/insertAccountAndProfile",methods=['POST','GET'])
 def insertAccountAndProfile():
 	if request.method == "POST":
@@ -27,17 +23,3 @@ def insertAccountAndProfile():
 			newAccount.addAccount()
 			newProfile.addProfile()
 			return redirect(url_for('signup'))
-
-@app.route("/login",methods=['POST','GET'])
-def login():
-	if request.method == "POST":
-		emailOrUsername =  request.form['emailOrUsername']
-		password =  request.form['password']
-		loginAccount = accounts.account()
-		if loginAccount.searchForLogin(emailOrUsername,password)==True:
-			return "<h1>WELCOME TO YOUR DASHBOARD</h1>"
-		elif loginAccount.searchForLogin(emailOrUsername,password)=="Invalid password!":
-			return render_template("signin.html",title="Signin to Panimalay",errorMsg1="Invalid password!",emailOrUsername=emailOrUsername,password=password)
-		else:
-			return render_template("signin.html",title="Signin to Panimalay",errorMsg2="Invalid email or username",emailOrUsername=emailOrUsername,password=password)
-
