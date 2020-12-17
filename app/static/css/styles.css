@@ -11,6 +11,31 @@
 
 body{
    background-color: #fff;
+    background-repeat: no-repeat;
+}
+.
+li{
+        display: inline;
+        list-style: none;
+      }
+      button {
+        background-color: black;
+        border: none;
+        color: white;
+        padding: 8px 30px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        margin: 2px 1px;
+        cursor: pointer;
+        font-size: 15px;
+        border-radius: 16px;
+      }
+      button:hover {
+        background-color: gray;
+      }
+img {
+  border-radius: 50%;
 }
 
 .wrapper{
@@ -82,6 +107,10 @@ body{
   width: 100%;
   margin-left: 200px;
 }
+.wrapper .seondmain_content{
+  width: 100%;
+  margin-left: 250px;
+}
 
 .wrapper .main_content .header{
   padding: 20px;
@@ -97,11 +126,15 @@ body{
 }
 
 .wrapper .main_content .info div{
-  margin-bottom: 20px;
+  margin-bottom: 100px;
 }
 
 .main {
   padding: 80px;
+}
+
+.secondmain {
+  padding: 500px;
 }
 .body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
@@ -139,5 +172,18 @@ body{
   padding: 20px;
 }
 .maintable {
-  padding: 100px;
+  padding: 80px;
 }
+
+.avatar-pic {
+width: 150px;
+}
+.file-field.medium .file-path-wrapper {
+height: 3rem; }
+.file-field.medium .file-path-wrapper .file-path {
+height: 2.8rem; }
+
+.file-field.big-2 .file-path-wrapper {
+height: 3.7rem; }
+.file-field.big-2 .file-path-wrapper .file-path {
+height: 3.5rem; }
