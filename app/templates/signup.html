@@ -10,40 +10,13 @@
 
     <title>PANIMALAY</title>
 
-    <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='house.png')}}">
-   
+    <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/signup_style.css')}}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <style type="text/css">
-
-      body{
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      li{
-        display: inline;
-        list-style: none;
-      }
-      button {
-        background-color: black;
-        border: none;
-        color: white;
-        padding: 8px 30px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        margin: 2px 1px;
-        cursor: pointer;
-        font-size: 15px;
-        border-radius: 16px;
-      }
-      button:hover {
-        background-color: gray;
-      }
-   </style>
 </head>
 <body>
 
-<body style="background-image: url({{url_for('static', filename='signupbg.jpg')}}">
+<body style="background-image: url({{url_for('static', filename='images/signupbg.jpg')}}">
    <header>
      <nav class="navbar" style="height: 50px;">
           <ul>
@@ -57,27 +30,27 @@
           </li>
           </ul>
 
-          <a style="padding-top: 0px;" class="navbar-brand" href="/signin"><img style="max-width: 50px;" src="{{url_for('static', filename='signinperson.png')}}"></a>
+          <a style="padding-top: 0px;" class="navbar-brand" href="/signin"><img style="max-width: 50px;" src="{{url_for('static',filename='images/signinperson.png')}}"></a>
         
    </nav> 
    </header>
    
    <div class="container pt-4" style="font-family: monserrat">
-      <div id="formContainer" class="container p-5 my-3 rounded border shadow-lg mb-5 bg-white rounded" style="width: 500px; height: 700px;">
+      <div id="formContainer" class="container p-5 my-3 rounded border shadow-lg mb-5 bg-white rounded" style="width: 500px; height: 780px;">
          <div class="container text-center">
             <h5>Create Account</h5>
             <h6>Already have an Account? <a href="/signin">Sign-in</a></h6>
          </div>
 {% if firstName|length>0 %}
-         <form action="{{url_for('insertAccountAndProfile')}}" method="POST">
+         <form id="signupForm" action="{{url_for('insertAccountAndProfile')}}" method="POST">
            <div class="form-row">
              <div class="col-6 mt-3">
                <label for="firstName">First Name</label>
-               <input type="text" id="firstName" name="firstName" class="form-control" value="{{firstName}}" required="1">
+               <input type="text" id="firstName" name="firstName" class="form-control is-valid" value="{{firstName}}" required="1">
              </div>
              <div class="col-6 mt-3">
                <label for="lastName">Last Name</label>
-               <input type="text" id="lastName" name="lastName" class="form-control" value="{{lastName}}" required="1">
+               <input type="text" id="lastName" name="lastName" class="form-control is-valid" value="{{lastName}}" required="1">
              </div>
              <div class="col-6 mt-3">
                 <label for="gender">Gender</label>
@@ -105,15 +78,21 @@
                   {% endif %}
                 </select>
              </div>
-              <div class="col-6 mt-3">
+  
+             <div class="col-6 mt-3">
                <label for="username">User Name</label>
                <input type="text" id="username" name="username" class="form-control" value="{{username}}" required="1">
-               <small id="errorMsg" style="color: red;font-size: 12px;">Username already taken!</small>
+               <small id="errorMsg1" style="color: red;font-size: 12px;">{{errorMsg1}}</small>
              </div>
             <div class="col-6 mt-3">
                 <label for="birthdate">Birthdate</label>
-                <input type="date" id="birthDate" name="birthDate" class="form-control" value="{{birthDateate}}" required="1">
+                <input type="date" id="birthDate" name="birthDate" class="form-control" value="{{birthDate}}" required="1">
             </div>
+            <div class="col-12 mt-3">
+               <label for="phoneNumber">Phone no.</label>
+               <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="{{phoneNumber}}" required="1">
+               <small id="errorMsg1" style="color: red;font-size: 12px;">{{errorMsg2}}</small>
+             </div>
             <div class="col-12 mt-3">
                <label for="email">Email</label>
                <input type="email" id="email" name="email" class="form-control" value="{{email}}" required="1">
@@ -129,11 +108,11 @@
            </div>
            <br>
            <div align="center">
-           <button type="submit">Sign up</button>
+           <button id="signupBtn" type="submit">Sign up</button>
            </div>
          </form>
 {% else %}
-       <form action="{{url_for('insertAccountAndProfile')}}" method="POST">
+       <form id="signupForm" action="{{url_for('insertAccountAndProfile')}}" method="POST">
            <div class="form-row">
              <div class="col-6 mt-3">
                <label for="firstName">First Name</label>
@@ -161,12 +140,16 @@
              </div>
               <div class="col-6 mt-3">
                <label for="username">User Name</label>
-               <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="1">
+               <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username" required="1">
              </div>
             <div class="col-6 mt-3">
                 <label for="birthdate">Birthdate</label>
                 <input type="date" id="birthDate" name="birthDate" class="form-control" placeholder="Enter Birthday" required="1">
             </div>
+            <div class="col-12 mt-3">
+               <label for="phoneNumber">Phone no.</label>
+               <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Enter Phone Number" required="1">
+             </div>
             <div class="col-12 mt-3">
                <label for="email">Email</label>
                <input type="email" id="email" name="email" class="form-control" placeholder=" Enter Email Address" required="1">
@@ -182,66 +165,16 @@
            </div>
            <br>
            <div align="center">
-           <button type="submit">Sign up</button>
+           <button id="signupBtn" type="submit">Sign up</button>
            </div>
          </form>
 {% endif %}  
       </div>
    </div>
 
-   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-   <script>
-  $(document).ready(function(){
-    $("#firstName").on('keyup',function(e){
-      if (e.target.value.length<=1){
-         $('#firstName').attr("class","form-control is-invalid");
-      }
-      else{
-        $('#firstName').attr("class","form-control is-valid");
-      }
-    })
-    $("#lastName").on('keyup',function(e){
-      if (e.target.value.length<=1){
-         $('#lastName').attr("class","form-control is-invalid");
-      }
-      else{
-        $('#lastName').attr("class","form-control is-valid");
-      }
-    })
-    $("#accountType").on('change',function(){
-       $('#accountType').attr("class","form-control is-valid");
-    })
-    $("#birthDate").on('change',function(){
-       $('#birthDate').attr("class","form-control is-valid");
-    })
-    $("#gender").on('change',function(){
-       $('#gender').attr("class","form-control is-valid");
-    })
-    $("#username").on('keyup',function(e){
-      if (e.target.value.length<8){
-         $('#username').attr("class","form-control is-invalid");
-      }
-      else{
-        $('#username').attr("class","form-control is-valid");
-      }
-    })
-    $("#username").on('click',function(){
-      $("#errorMsg").hide();
-    })
-    $("#email").on('keyup',function(){
-       $('#email').attr("class","form-control is-valid");
-    })
-    $("#password").on('keyup',function(e){
-      if (e.target.value.length<8){
-         $('#password').attr("class","form-control is-invalid");
-      }
-      else{
-        $('#password').attr("class","form-control is-valid");
-      }
-    })
-});
-</script>
-   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/signup.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
