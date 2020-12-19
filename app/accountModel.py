@@ -7,18 +7,18 @@ class account():
 		self.password = password
 		self.accountType = accountType
 
-	def search(self,usrnm):
+	def usernameValidate(self,username):
 		cur = mysql.connection.cursor()
-		cur.execute("SELECT * FROM accounts WHERE username=%s",(usrnm,))
-		result = cur.fetchall()
-		if len(result)>0:
+		cur.execute("SELECT * FROM accounts WHERE username=%s",(username,))
+		result = cur.fetchone()
+		if bool(result)==True:
 			return True
 		else:
 			return False
 	@classmethod
-	def searchForLogin(cls,emailOrUsername,password):
+	def searchForLogin(cls,username,password):
 		cur = mysql.connection.cursor()
-		cur.execute("SELECT * FROM accounts WHERE username=%s",(emailOrUsername,))
+		cur.execute("SELECT * FROM accounts WHERE username=%s",(username,))
 		result = cur.fetchone()
 		if result is not None and len(result)!=0:
 			if password==result[2]:
@@ -26,7 +26,7 @@ class account():
 			else:
 				return "Invalid password!"
 		else:
-			return "Invalid email or password!"
+			return "Invalid username!"
 			
 	def addAccount(self):
 		cur = mysql.connection.cursor()
@@ -54,3 +54,19 @@ class account():
 		for account in accounts:
 			usernames.append(account[0])
 		return usernames
+
+
+	@classmethod
+	def profileData(cls,username):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM accounts WHERE username=%s",(username,))
+		acccountData = cur.fetchone()
+		cur.execute("SELECT * FROM profiles WHERE username=%s",(username,))
+		profileData = cur.fetchone()
+		data = [acccountData,profileData]
+		return data
+		
+	def updateAccount(self):
+		cur = mysql.connection.cursor()
+		cur.execute("UPDATE accounts SET email=%s,password=%s WHERE username=%s",(self.email,self.password,self.username))
+		mysql.connection.commit()
