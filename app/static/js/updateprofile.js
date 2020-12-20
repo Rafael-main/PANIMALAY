@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$("form").submit(function(e){
+	$("#info").submit(function(e){
 		var username = $("#username").val();
 		var phoneNumber = $("#phoneNumber").val();
 		var password = $("#password").val(); 
