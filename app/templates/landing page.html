@@ -23,20 +23,18 @@
                                 font-family: montserrat">
       <nav class="navbar text-white ">
 
-        <div class="container">
+        
 
           <span class="navbar-brand mb-0 h1" style="color: white;font-size:20; font-family: 'baybayin rounded'"><h1>P A N I M A L A Y</h1></span>
           
-          <div class="btn-group pt-3" >
+          <div class="bg-white rounded-circle" style="width:58px;height: 58px; ">
+            <div class="btn-group pt-1 pl-1" >
 
-            <p class="lead">
-              <a href="/signup" class="btn btn-outline-dark bg-dark text-white mr-2 ml-5">Sign-up</a>
-            </p>
-            <p class="lead">
-              <a href="/signin" class="btn btn-outline-dark bg-dark text-white mr-2">Sign-in</a>
-            </p>
-
-          </div>    
+              <a style="padding-top: 0px; " class="navbar-brand" href="/signin"><img class="rounded-lg" style="max-width: 50px;" src="{{url_for('static', filename='signinperson.png')}}"></a>
+            
+            </div>   
+          </div>
+           
           
       </nav>
 
@@ -64,7 +62,7 @@
         <div class="dropdown-menu" >
           <a class="dropdown-item" href="#"><button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#definiteModal">Boarding House</button></a>
           <a class="dropdown-item" href="#"><button class="btn btn-outline-dark" data-toggle="modal" data-target="#indefiniteModal">Apartment</button></a>
-          
+          <a class="dropdown-item" href="#"><button class="btn btn-outline-dark" data-toggle="modal" data-target="#indefiniteModal">Dorm</button></a>
         </div>
       </div>
 
