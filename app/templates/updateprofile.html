@@ -25,17 +25,17 @@
       <div align="center">
         {% if datum is not none %}
         <img id="profilepicture" src="data:;base64,{{datum}}" style="border-radius: 50%;">
-        <form action="http://127.0.0.1:5000/update/profile/{{data.0.0}}/{{data.1.1}}" method="POST" enctype="multipart/form-data" accept="image/*">
+        <form action="http://127.0.0.1:5000/update/profile/{{data.0.0}}/{{data.1.1}}" method="POST" enctype="multipart/form-data">
            <hr>
-          <input id="profilePicInput" type="file" name="profilePicInput">
+          <input id="profilePicInput" type="file" name="profilePicInput" accept="image/png,image/jpg">
           <button id="changePicBtn" type="submit">Change Profile Picture</button>
           <hr>
         </form>
         {% else%}
         <img id="profilepicture" src="{{url_for('static',filename='images/signinperson.png')}}" style="border-radius: 50%;">
-        <form action="http://127.0.0.1:5000/add/profile/{{data.0.0}}/{{data.1.1}}" method="POST" enctype="multipart/form-data" accept="image/*">
+        <form action="http://127.0.0.1:5000/add/profile/{{data.0.0}}/{{data.1.1}}" method="POST" enctype="multipart/form-data">
            <hr>
-          <input id="profilePicInput" type="file" name="profilePicInput">
+          <input id="profilePicInput" type="file" name="profilePicInput" accept="image/png,image/jpg">
           <button id="changePicBtn" type="submit">Add Profile Picture</button>
            <hr>
         </form>
