@@ -14,7 +14,7 @@ class profile():
 		cur = mysql.connection.cursor()
 		flag = 0
 		while flag==0:
-			if accountType=='RENTER':
+			if accountType=="Renter":
 				randomstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
 				prefix= 'RENTER'
 				profileID = prefix+randomstr
@@ -67,3 +67,11 @@ class profile():
 		cur.execute("UPDATE profilephonenumber SET phoneNumber=%s WHERE profileID=%s",(phoneNumber,profileID))
 		mysql.connection.commit()
 
+	def allPhoneNumbers(self):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM profilephonenumber")
+		phoneNumbers = cur.fetchall()
+		listOfPhoneNumbers = []
+		for p in phoneNumbers:
+			listOfPhoneNumbers.append(p[1])
+		return listOfPhoneNumbers
