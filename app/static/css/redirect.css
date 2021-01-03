@@ -22,6 +22,11 @@
 	display: none;
   }
   
+  .carousel-inner .carousel-item img {
+	width:640px;
+	height:180px;
+	object-fit: cover;
+  }
   .carousel-item img {
 	border-top-left-radius: 22px;
 	border-top-right-radius: 22px;
@@ -54,11 +59,10 @@
   }
   
   
-  .map{
+  .map, #mapid{
 	width: 600px; 
-	height: 670px; 
-	position: absolute; 
-	border-radius: 32px;
+	height: 600px; 
+	position: absolute;
   }
   
   a:visited {
@@ -79,7 +83,25 @@
   }
 
   .carousel-indicators li {
-	width: 10px;
-	height: 10px;
+	width: 5px;
+	height: 5px;
 	border-radius: 100%;
   }
+
+  .price {
+	font-size: smaller;
+  }
+
+  .btn-filters{
+	border-radius: 32px !important;
+	border: 1px solid black !important;
+	font-size: small;
+  }
+
+  .btn-filters:hover{
+    background-color: #dfa2a2;
+    color: black;
+    border-radius: 10px;
+}
+
+
