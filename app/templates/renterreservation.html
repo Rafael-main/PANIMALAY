@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PANIMALAY</title>
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/payment_style.css')}}">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>PANIMALAY</h2>
+        <ul>
+            <li><a href="http://127.0.0.1:5000/renter/profile"><i class="fas fa-id-card"></i>Profile</a></li>
+            <li><a href="http://127.0.0.1:5000/renters/reservations"><i class="fas fa-project-diagram"></i><strong>Reservations</strong></a></li>
+            <li><a href="#"><i class="fas fa-star"></i>Reviewed Units</a></li>
+            <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        </ul> 
+    </div>
+
+        <div class="main_content">
+           <div id="paymentRecord">
+            <h4>Reservations</h4>
+          </div>
+          <div id="paymentDataContainer">
+            <div style="background-color: white;padding:50px;padding-bottom: 300px;">
+            <br>
+            
+            {% for reservation in allReservations %}
+            {% if reservation.0 == username and reservation.4!="C"%}
+            {% for a in allUnits %}
+            {% for r in rentalBusinesses %}
+            {% if reservation.1 == a.1 and a.0 == r.2 %}
+            
+
+
+            <div style="border-radius: 10px;background-color:white;padding: 20px;border:1px solid black;">
+            {% for unit in allUnits %}
+            {% for rentalBusiness in rentalBusinesses %}
+            {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
+            <h5>Reservation to: {{rentalBusiness.1}}</h5>
+            {% endif%}
+            {% endfor %}
+            {% endfor %}
+            
+            <div class="row" style="padding:20px;">
+            <div class="column" style="margin-right: 100px;">
+            <h6>Unit ID: {{a.1}}</h6>
+            <h6>Reservation Date:{{reservation.3}} </h6>
+            <h6>Unit Type: {{a.4}}</h6>
+            {% for unit in allUnits %}
+            {% for rentalBusiness in rentalBusinesses %}
+            {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
+            {% for phoneNumber in phoneNumbers%}
+            {% if rentalBusiness.2 == phoneNumber.0 %} 
+            <h6>Contact: {{phoneNumber.1}}</h6>
+            {% endif %}
+            {%endfor %}
+            {% endif%}
+            {% endfor %}
+            {% endfor %}
+
+            </div>
+            <div class="column">
+            <h6>Capacity: {{a.2}}</h6>
+            <h6>Rate:P{{a.3}}</h6>
+            <h6>Gender Accommodation:{{a.5}}</h6>
+            {% if reservation.4 =="WFOR"%}
+            <h6>Status: Waiting for the Owner's response</h6>
+            {% elif reservation.4 =="A"%}
+            <h6 style="color: green;">Status: Accepted </h6>
+            {% elif reservation.4 =="D"%}
+             <h6 style="color: red">Status: Declined </h6>
+            {% endif %}
+            </div>
+            </div>
+            {% if reservation.4=="WFOR"%}
+            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger" style="border-radius:10px;">Cancel</button></a>
+            {% endif %}
+            {% if reservation.4=="A"%}
+            <div align="center" style="margin-left:20%;margin-right: 20%; ">
+            {% for unit in allUnits %}
+            {% for rentalBusiness in rentalBusinesses %}
+            {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
+            <p>The owner of {{rentalBusiness.1}} accepted your reservation, please confirm if you want to rent in their unit.Once you confirm it you will be directly added to the renter list of {{rentalBusiness.1}}</p>
+            {% endif%}
+            {% endfor %}
+            {% endfor %}
+            <a href="http://127.0.0.1:5000/confirm/reservation/{{reservation.2}}/{{reservation.1}}"><button class="btn btn-success float-left">Confirm</button></a>
+            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger float-right">Cancel</button></a>
+            </div>
+            <br>
+            {% endif %}
+            {%endif%}
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            </div>
+            </div>
+          </div>
+        </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+</body>
+</html>
