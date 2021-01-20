@@ -72,7 +72,6 @@ class profile():
 		cur.execute("UPDATE profilephonenumber SET phoneNumber=%s WHERE profileID=%s",(phoneNumber,profileID))
 		mysql.connection.commit()
 
-
 	def allPhoneNumbers(self):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM profilephonenumber")

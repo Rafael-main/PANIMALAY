@@ -98,7 +98,6 @@ CREATE TABLE IF NOT EXISTS `payments` (
   CONSTRAINT `payments_ibfk_3` FOREIGN KEY (`unitRented`) REFERENCES `units` (`unitID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
-
 -- Data exporting was unselected.
 
 -- Dumping structure for table resources.profilephonenumber
@@ -198,6 +197,21 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table resources.reservation
+CREATE TABLE IF NOT EXISTS `reservation` (
+  `username` varchar(255) NOT NULL,
+  `unitID` varchar(16) NOT NULL,
+  `reservationNo` int(11) NOT NULL AUTO_INCREMENT,
+  `reservationDate` date NOT NULL,
+  PRIMARY KEY (`reservationNo`),
+  KEY `username` (`username`),
+  KEY `unitID` (`unitID`),
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`username`) REFERENCES `accounts` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`unitID`) REFERENCES `units` (`unitID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table resources.services
 CREATE TABLE IF NOT EXISTS `services` (
   `RBID` varchar(16) NOT NULL,
@@ -228,7 +242,6 @@ CREATE TABLE IF NOT EXISTS `units` (
   `rate` varchar(255) NOT NULL,
   `unitType` varchar(255) NOT NULL,
   `genderAccommodation` enum('Female','Male','Unisex') NOT NULL,
-
   PRIMARY KEY (`unitID`),
   KEY `RBID` (`RBID`),
   CONSTRAINT `units_ibfk_1` FOREIGN KEY (`RBID`) REFERENCES `rentalbusiness` (`RBID`) ON DELETE CASCADE ON UPDATE CASCADE
