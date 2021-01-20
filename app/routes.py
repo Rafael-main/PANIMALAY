@@ -1,7 +1,9 @@
-import simplejson as json
+
+import os
 from datetime import datetime
 import base64
-from flask import Flask,flash,render_template, redirect, request,url_for,session
+import simplejson as json
+from flask import Flask,render_template, redirect, request,url_for,abort, session
 from app import app
 import app.accountModel as accounts
 import app.profileModel as profiles
@@ -153,45 +155,24 @@ def updateProfilePage():
 	else:
 		return redirect(url_for("signin"))
 
-@app.route("/add/profile/picture/<string:username>/<string:profileID>",methods=["POST"])
-def addProfilePicture(username,profileID):
+@app.route("/add/profile/picture/<string:profileID>",methods=["POST"])
+def addProfilePicture(profileID):
 	file = request.files["profilePicInput"]
 	filename= file.filename
 	blob = file.read()
 	newProfilePic = profilepic.profilePicture(filename,blob)
 	newProfilePic.addProfilePicture(profileID)
-	acc = accounts.account()
-	prof= profiles.profile()
-	data = acc.profileData(username)
-	phoneNumber = prof.searchPhoneNumber(str(username))
-	file =  profilepic.profilePicture()
-	datum = file.retrieveFile(data[1][1])
-	if datum!=None:
-		datum = base64.b64encode(datum[2])
-		datum = datum.decode("UTF-8")
-	else:
-		datum = datum
-	return redirect(url_for("updateProfilePage",username=username,data=data,phoneNumber=phoneNumber,datum=datum))
 
-@app.route("/update/profile/picture/<string:username>/<string:profileID>",methods=["POST"])
-def updateProfilePicture(username,profileID):
+	return redirect(url_for("updateProfilePage"))
+
+@app.route("/update/profile/picture/<string:profileID>",methods=["POST"])
+def updateProfilePicture(profileID):
 	file = request.files["profilePicInput"]
 	filename= file.filename
 	blob = file.read()
 	newProfilePic = profilepic.profilePicture(filename,blob)
 	newProfilePic.updateProfilePicture(profileID)
-	acc = accounts.account()
-	prof= profiles.profile()
-	data = acc.profileData(username)
-	phoneNumber = prof.searchPhoneNumber(str(username))
-	file =  profilepic.profilePicture()
-	datum = file.retrieveFile(data[1][1])
-	if datum!=None:
-		datum = base64.b64encode(datum[2])
-		datum = datum.decode("UTF-8")
-	else:
-		datum = datum
-	return redirect(url_for("updateProfilePage",username=username,data=data,phoneNumber=phoneNumber,datum=datum))
+	return redirect(url_for("updateProfilePage"))
 
 @app.route("/update/profile/<string:username>/<string:profileID>",methods=["POST"])
 def updateInfo(username,profileID):
@@ -204,9 +185,7 @@ def updateInfo(username,profileID):
 		profileToupdate = profiles.profile(username,firstName,lastName,birthDate,gender)
 		profileToupdate.updateProfile(profileID)
 		profileToupdate.updatePhoneNumber(phoneNumber,profileID)
-		return redirect(url_for("profile",username=username))
-
-
+		return redirect(url_for("profile"))
 
 @app.route("/insertAccountAndProfile",methods=['POST','GET'])
 def insertAccountAndProfile():
@@ -229,7 +208,6 @@ def insertAccountAndProfile():
 		newProfile = profiles.profile(username,firstName,lastName,birthDate,gender)
 		
 		errorMsg1 = ""
-		
 		errorMsg2 = ""
 		if newAccount.usernameValidate(username)==True:
 			errorMsg1 = "Username already taken!"
@@ -246,7 +224,11 @@ def insertAccountAndProfile():
 			newAccount.addAccount()
 			newProfile.addProfile(accountType,phoneNumber)
 			session["username"] = username
-			return redirect(url_for('home'))
+			session["accountType"] = accountType
+			if accountType == "owner":
+				return redirect(url_for('home'))
+			else:
+				return redirect(url_for('landingPage'))
 			
 
 @app.route("/home")
@@ -330,10 +312,9 @@ def units():
 			rbName = ownedRenBus[1]
 			ownedUnits = unit.newUnit()
 			ownedUnits = ownedUnits.searchUnit(RBID)
-
 			return render_template("units.html",username=username,ownedUnits=ownedUnits,rbName=rbName,RBID=RBID)
 		else:
-			return render_template("units.html",username=username)
+			return render_template("units.html")
 	else:
 		return redirect(url_for("signin"))
 
@@ -347,14 +328,15 @@ def addUnitForm():
 			RBID = ownedRenBus[2]
 			return render_template("addunit.html",username=username,RBID=RBID)
 		else:
-			return render_template("addunit.html",username=username)
+			return render_template("addunit.html")
 	else:
 		return redirect(url_for("signin"))
 
 @app.route("/add/unit",methods=["POST"])
 def addUnit():
 	if request.method == "POST":
-		username = request.form["username"]
+		if "username" in session:
+			username = session["username"]
 		unitType = request.form["unitType"]
 		genderAccommodation = request.form["genderAccommodation"]
 		capacity = request.form["capacity"]
@@ -484,12 +466,15 @@ def paymentsTable():
 		username = session["username"]
 		RBID = renbus.rentalBusiness()
 		RBID = RBID.searchRentalBusiness(username)
-		RBID = RBID[2]
-		ownedUnits = unit.newUnit()
-		ownedUnits = ownedUnits.searchUnit(RBID)
-		paymentRecord =  payments.newPayment()
-		paymentRecord = paymentRecord.searchPayments(RBID)
-		return render_template("payment.html",username=username,RBID=RBID,ownedUnits=ownedUnits,paymentRecord=paymentRecord)
+		if RBID!=None:
+			RBID = RBID[2]
+			ownedUnits = unit.newUnit()
+			ownedUnits = ownedUnits.searchUnit(RBID)
+			paymentRecord =  payments.newPayment()
+			paymentRecord = paymentRecord.searchPayments(RBID)
+			return render_template("payment.html",username=username,RBID=RBID,ownedUnits=ownedUnits,paymentRecord=paymentRecord)
+		else:
+			return redirect(url_for("manageBusiness"))
 	else:
 		return redirect(url_for("signin"))
 
@@ -551,7 +536,7 @@ def uploadUnitImages(username,unitID):
 			blob = file.read()
 			newImage = unitimages.unitImages(filename,blob)
 			newImage.addImage(unitID)
-	return redirect(url_for("gallery",username=username,unitID=unitID))
+	return redirect(url_for("gallery",unitID=unitID))
 
 @app.route("/delete/unit/image/<string:unitID>/<string:imageID>")
 def deleteUnitImage(unitID,imageID):
@@ -559,7 +544,7 @@ def deleteUnitImage(unitID,imageID):
 		username = session["username"]
 		delImage = unitimages.unitImages()
 		delImage.deleteImages(imageID)
-		return redirect(url_for("gallery",username=username,unitID=unitID))
+		return redirect(url_for("gallery",unitID=unitID))
 	else:
 		return redirect(url_for("signin"))
 
@@ -590,22 +575,24 @@ def searchResult():
 		else:
 			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
 	else:
-		return render_template("searchResult.html")
+		if "username" in session and "accountType" in session:
+			username = session["username"]
+		return render_template("searchResult.html",username=username)
 
 @app.route("/feedback/<string:unitID>")
 def feedbackForm(unitID):
 	if "username" in session:
 		username = session["username"]
 		feedBackandRatings =  feedback.newFeedback()
-		feedbacks = feedBackandRatings.searchAllFeedback()
+		feedbacks = feedBackandRatings.searchAllFeedback(unitID)
 		profileInfo=profiles.profile()
 		profileInfo  = profileInfo.searchProfile(username)
 		return render_template("feedback.html",username=username,unitID=unitID,feedbacks=feedbacks,profileInfo=profileInfo)
 	else:
 		return render_template("feedback.html")
 
-@app.route("/add/feedback/<string:unitID>",methods=["POST"])
-def addFeedback(unitID):
+@app.route("/add/feedback/<string:unitID>/<string:RBID>",methods=["POST"])
+def addFeedback(unitID,RBID):
 	if request.method == "POST":
 		comment = request.form["comment"]
 		starRating = request.form["starRating"]
@@ -614,9 +601,60 @@ def addFeedback(unitID):
 			username = session["username"]
 			feedBackandRatings = feedback.newFeedback(username,unitID,starRating,comment,feedbackDate)
 			feedBackandRatings.add()
-			return	render_template("feedback.html")
+			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
 	else:
-		return	render_template("feedback.html")
+		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+
+@app.route("/update/feedback/<string:unitID>/<string:RBID>/<int:feedbackNo>",methods=["POST"])
+def updateFeedback(unitID,RBID,feedbackNo):
+	if request.method == "POST":
+		comment = request.form["comment"]
+		starRating = request.form["starRating"]
+		feedbackDate = request.form["feedbackDate"]   
+		if "username" in session:
+			username = session["username"]
+			feedBackandRatings = feedback.newFeedback()
+			feedBackandRatings.updateFeedback(comment,starRating,feedbackDate,feedbackNo)
+			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+	else:
+		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+
+@app.route("/delete/feedback/<string:unitID>/<string:RBID>/<int:feedbackNo>")
+def deleteFeedback(unitID,RBID,feedbackNo):  
+	if "username" in session:
+		username = session["username"]
+		feedBackandRatings = feedback.newFeedback()
+		feedBackandRatings.deleteFeedback(feedbackNo)
+		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+	else:
+		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+
+
+@app.route("/renters")
+def renters():
+	if "username" in session:
+		username = session["username"]
+		rentalbusiness = renbus.rentalBusiness()
+		rentalBusinessInfo = rentalbusiness.searchRentalBusiness(username)
+		if rentalbusiness.searchRentalBusiness(username)!=None:
+			RBID = rentalBusinessInfo[2]
+			ownedUnits = unit.newUnit()
+			rentersInfo = ownedUnits.renterInfo()
+			profilePictures = profilepic.profilePicture()
+			profilePictures = profilePictures.searchAllProfilePictures()
+			profilePicturesWithBlob = []
+			imageChecker = len(profilePictures)
+			if imageChecker!=0:
+				for picture in profilePictures:
+					blob  = base64.b64encode(picture[3])
+					blob = blob.decode("UTF-8")
+					profilePicturesWithBlob.append([picture[0],picture[1],picture[2],blob])
+
+			return render_template("renters.html",RBID=RBID,rentersInfo=rentersInfo,profilePictures=profilePicturesWithBlob)
+		else:
+			return redirect(url_for("manageBusiness"))
+	else:
+		return redirect(url_for("signin"))
 
 @app.route("/renter/reservations")
 def rentersReservations():
@@ -657,9 +695,9 @@ def ownersReservation():
 				rbName = ownedRenBus[1]
 				ownedUnits = unit.newUnit()
 				ownedUnits = ownedUnits.searchUnit(RBID)
-			return render_template("ownerreservation.html",RBID=RBID,rbName=rbName,ownedUnits=ownedUnits,allReservations=allReservations,allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,username=username,allProfiles=allProfiles,renterPhoneNumbers=renterPhoneNumbers)
-		else:
-			return redirect(url_for("landingPage"))
+				return render_template("ownerreservation.html",RBID=RBID,rbName=rbName,ownedUnits=ownedUnits,allReservations=allReservations,allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,username=username,allProfiles=allProfiles,renterPhoneNumbers=renterPhoneNumbers)
+			else:
+				return redirect(url_for("manageBusiness"))
 	else:
 		return redirect(url_for("signin"))
 
@@ -671,7 +709,7 @@ def addReservation(unitID):
 			reservationDate = datetime.today().strftime('%Y-%m-%d')
 			newReservation = reservation.newReservation(username,unitID,reservationDate)
 			newReservation.addReservation()
-			return redirect(url_for("landingPage"))
+			return redirect(url_for("rentersReservations"))
 		else:
 			return redirect(url_for("signin"))
 	else:
@@ -704,16 +742,16 @@ def declineReservation(reservationNo):
 	else:
 		redirect(url_for("landingPage"))
 
-@app.route("/delete/reservation/<int:reservation>")
+@app.route("/delete/reservation/<int:reservationNo>")
 def deleteReservation(reservationNo):
 	if "username" in session:
-			username = session["username"]
-			accountType = session["accountType"]
-			if accountType == "owner":
-				newReservation = reservation.newReservation()
-				newReservation.deleteReservation(reservationNo)
-				flash(u'You have delete the reservation!','success')
-			return redirect(url_for("ownersReservation"))
+		username = session["username"]
+		accountType = session["accountType"]
+		if accountType == "renter":
+			newReservation = reservation.newReservation()
+			newReservation.deleteReservation(reservationNo)
+			flash(u'You have delete the reservation!','success')
+		return redirect(url_for("rentersReservations"))
 	else:
 		return redirect(url_for("landingPage"))
 
@@ -742,7 +780,7 @@ def rentedUnit():
 			renters = searchAllRenters.renters()
 			rb = renbus.rentalBusiness()
 			phoneNumbers = rb.searchAllRentalBusinessPhoneNumber()
-		return render_template("rentedunit.html",username=username,accountType=accountType,rentals=rentals,locations=locations,renters=renters,units=allUnits,phoneNumbers=phoneNumbers)
+			return render_template("rentedunit.html",username=username,accountType=accountType,rentals=rentals,locations=locations,renters=renters,units=allUnits,phoneNumbers=phoneNumbers)
 	else:
 		return redirect(url_for("landingPage"))
 
@@ -758,33 +796,37 @@ def reviewUnits():
 			rb = renbus.rentalBusiness()
 			phoneNumbers = rb.searchAllRentalBusinessPhoneNumber()
 			feedBackandRatings =  feedback.newFeedback()
-			feedbacks = feedBackandRatings.searchAllFeedback()
+			feedbacks = feedBackandRatings.reviewedUnitsFeedback()
 		return render_template("reviewedunits.html",username=username,accountType=accountType,rentals=rentals,units=allUnits,feedbacks=feedbacks)
 	else:
 		return redirect(url_for("landingPage"))
 @app.route("/signout")
+
 def logout():
 	if "username" in session:
 		session.pop("username",None)
-		seesson.pop("accountType",None)
+		session.pop("accountType",None)
 		return redirect(url_for("signin"))
 	else:
 		return redirect(url_for("signin"))	
 
-@app.route('/selected/unit')
-def selected_unit():
-	#pwede ni mailisdan depende sa rentalbusiness.RBID ug units.unitID 
-	rental_id = 'RENTALKFV95H49M2'
-	unit_id = 'UNITJ7OMX0TMFMYN'
+@app.route('/selected/unit/<string:RBID>/<string:unitID>')
+def selected_unit(RBID,unitID):
 
-	
 	res = searches.Search()
-	searchResultUnits = res.selectedSearchUnit(rental_id, unit_id)
-	searchResultProtocols = res.selectedSearchProtocols(rental_id, unit_id)
-	searchResultServices = res.selectedSearchServices(rental_id,unit_id)
-	searchResultFacilities = res.selectedSearchFacilities(unit_id)
-	searchResultLocations = res.selectedSearchLocations(unit_id)
-	searchResultUnitImages = res.selectedUnitImages(unit_id)
+	searchResultUnits = res.selectedSearchUnit(RBID, unitID)
+	searchResultProtocols = res.selectedSearchProtocols(RBID, unitID)
+	searchResultServices = res.selectedSearchServices(RBID,unitID)
+	searchResultFacilities = res.selectedSearchFacilities(unitID)
+	searchResultLocations = res.selectedSearchLocations(unitID)
+	searchResultAvailability = res.selectedUnitAvailability(unitID)
+	searchResultUnitImages = res.selectedUnitImages(unitID)
+	searchResultRentalBusiness = res.selectedRentalBusiness(RBID)
+	searchResultRentalBusinessPhoneNumber = res.selectedRentalBusinessPhoneNumber(RBID)
+	searchResultFeedback = feedback.newFeedback()
+	searchResultFeedback = searchResultFeedback.searchAllFeedback(unitID)
+	userProfiles = profiles.profile()  
+	allProfiles = userProfiles.allProfiles()
 	imagesBlob = []
 	imageChecker = len(searchResultUnitImages)
 	if imageChecker!=0:
@@ -792,7 +834,27 @@ def selected_unit():
 			blob  = base64.b64encode(image[3])
 			blob = blob.decode("UTF-8")
 			imagesBlob.append([image[0],image[1],image[2],blob])
+	if "username" in session:
+		username = session["username"]
+	else:
+		username = "unknown"
 
+	#calculate the average star rating
+	sumOfAllStar = 0
+	if len(searchResultFeedback)!=0:
+		for f in searchResultFeedback:
+				sumOfAllStar = sumOfAllStar + f[4]
+		starRatingAverage = sumOfAllStar/len(searchResultFeedback)
+	else:
+		starRatingAverage = sumOfAllStar
+	#current data
+	currentDate = datetime.today().strftime('%Y-%m-%d')
+
+	currentUserFeedbackChecker = 0
+	if searchResultFeedback!=None:
+		for i in searchResultFeedback:
+			if i[0]==username:
+				currentUserFeedbackChecker = 1
 
 
 	searchResultUnits['locations'] = searchResultLocations
@@ -800,6 +862,13 @@ def selected_unit():
 	searchResultUnits['services'] = searchResultServices
 	searchResultUnits['facilities'] = searchResultFacilities
 	searchResultUnits['images'] = imagesBlob
-	searchResultUnits['feedbacks'] = [{}]
+	searchResultUnits['rental'] = searchResultRentalBusiness
+	searchResultUnits['phonenumber'] = searchResultRentalBusinessPhoneNumber
+	searchResultUnits['profiles'] = allProfiles
+	searchResultUnits['feedbacks'] = searchResultFeedback
+	searchResultUnits['currentUserFeedbackChecker'] = currentUserFeedbackChecker
+	searchResultUnits['starRatingAverage'] = starRatingAverage
+	searchResultUnits['currentDate'] = currentDate
+	searchResultUnits['searchResultAvailability'] = searchResultAvailability 
 
-	return render_template('selected.html', selected_data=searchResultUnits)
+	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username)

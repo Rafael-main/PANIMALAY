@@ -61,4 +61,8 @@ class unitImages():
 			blob = blob.decode("UTF-8")
 			image_dct['datum'] = blob
 			images.append(image_dct)
+<<<<<<< HEAD
 			return images
+=======
+			return images
+>>>>>>> main

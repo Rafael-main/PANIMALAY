@@ -10,7 +10,7 @@ class newReservation():
 	def addReservation(self):
 		status = 'WFOR'
 		cur = mysql.connection.cursor()
-		cur.execute("INSERT INTO reservations(username,unitID,reservationDate,status) VALUES (%s,%s,%s)",(self.username,self.unitID,self.reservationDate,status))
+		cur.execute("INSERT INTO reservations(username,unitID,reservationDate,status) VALUES (%s,%s,%s,%s)",(self.username,self.unitID,self.reservationDate,status))
 		mysql.connection.commit()
 
 	@classmethod

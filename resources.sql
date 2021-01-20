@@ -4,7 +4,7 @@
 -- Server OS:                    Win32
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
-
+panimalay
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -109,7 +109,6 @@ CREATE TABLE IF NOT EXISTS `profilephonenumber` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
-
 -- Dumping structure for table resources.profilepictures
 CREATE TABLE IF NOT EXISTS `profilepictures` (
   `profileID` varchar(255) NOT NULL,
@@ -179,6 +178,36 @@ CREATE TABLE IF NOT EXISTS `renters` (
   `checkoutDate` date DEFAULT NULL,
   KEY `username` (`username`),
   CONSTRAINT `renters_ibfk_1` FOREIGN KEY (`username`) REFERENCES `accounts` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+-- Dumping structure for table resources.reservation
+CREATE TABLE IF NOT EXISTS `reservation` (
+  `username` varchar(255) NOT NULL,
+  `unitID` varchar(16) NOT NULL,
+  `reservationNo` int(11) NOT NULL AUTO_INCREMENT,
+  `reservationDate` date NOT NULL,
+  PRIMARY KEY (`reservationNo`),
+  KEY `username` (`username`),
+  KEY `unitID` (`unitID`),
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`username`) REFERENCES `accounts` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`unitID`) REFERENCES `units` (`unitID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+
+-- Dumping structure for table resources.reservation
+CREATE TABLE IF NOT EXISTS `reservation` (
+  `username` varchar(255) NOT NULL,
+  `unitID` varchar(16) NOT NULL,
+  `reservationNo` int(11) NOT NULL AUTO_INCREMENT,
+  `reservationDate` date NOT NULL,
+  PRIMARY KEY (`reservationNo`),
+  KEY `username` (`username`),
+  KEY `unitID` (`unitID`),
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`username`) REFERENCES `accounts` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`unitID`) REFERENCES `units` (`unitID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.

@@ -86,12 +86,18 @@ class Search():
         cur.execute("""SELECT units.unitID,facilities.facility FROM units
         INNER JOIN facilities ON units.unitID = facilities.unitID
         WHERE units.unitID = %s""", (unit_id,))
+<<<<<<< HEAD
         result = cur.fetchall()
         fclt = list()
         for res in result:
             fclt.append(res[1])
         return fclt
 
+=======
+        result = cur.fetchone()
+        facilities = result[1].split(",")
+        return facilities
+>>>>>>> main
     @classmethod
     def selectedSearchLocations(cls, unit_id):
         cur = mysql.connection.cursor()
@@ -122,4 +128,40 @@ class Search():
     	cur.execute("SELECT * FROM feedbacks WHERE unitID=%s",(unit_id,))
     	feedbacks = cur.fetchall()
     	return feedbacks
+<<<<<<< HEAD
 	
+=======
+	
+
+    @classmethod
+    def selectedRentalBusiness(cls,RBID):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM rentalbusiness WHERE RBID=%s",(RBID,))
+        rb = cur.fetchone()
+        return rb
+
+    @classmethod
+    def selectedRentalBusinessPhoneNumber(cls,RBID):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM rentalbusinessphonenumber WHERE RBID=%s",(RBID,))
+        phoneNumber = cur.fetchone()
+        phoneNumber = phoneNumber[1]
+        return phoneNumber
+
+    @classmethod
+    def selectedUnitAvailability(cls,unitID):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM renters WHERE unitID=%s",(unitID,))
+        renters =  cur.fetchall()
+        cur.execute("SELECT * FROM units WHERE unitID=%s",(unitID,))
+        unit = cur.fetchall()
+        noOfRenters = 0
+        for i in renters:
+            noOfRenters+=1
+
+        if noOfRenters<unit[0][2]:
+            return True
+        else:
+            return False
+
+>>>>>>> main

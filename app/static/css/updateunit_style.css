@@ -186,3 +186,11 @@ ul#manageBusinessNavBar li{
   margin-left: 100px;
 }
 
+ul#facilitiesButton li{
+display:inline; 
+}
+
+.column{
+margin-left: 20px;
+margin-right: 20px;
+}

@@ -75,4 +75,4 @@ $(document).ready(function(){
 			alert("Using space in password input is not allowed");
 		}
 	})
-}); 	
+});

@@ -1,4 +1,4 @@
-from app import app,mysql
+from app import app, mysql
 import random, string
 
 class profile():
@@ -45,7 +45,6 @@ class profile():
 		cur.execute("SELECT * FROM profiles")
 		profiles = cur.fetchall()
 		return profiles
-
 
 	@classmethod
 	def searchPhoneNumber(cls,username):

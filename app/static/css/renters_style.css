@@ -91,6 +91,7 @@ color: #717171;
 border-bottom: 1px solid #e0e4e8;
 }
 
+
 .wrapper .main_content .info{
 margin: 20px;
 color: #717171;
@@ -143,21 +144,30 @@ padding: 20px;
 padding: 100px;
 }
 
-#accountInfo{
+#rentersRecord{
   background-color: #404040;
   color: #ffffff;
   padding: 20px;
 }
 
-#accountDataContainer{
-  padding-bottom: 700px;
+#renterDataContainer{
+ padding-bottom: 700px;
 }
-ul#accountNavBar li{
-  display: inline;
-  margin-right: 110px;
+
+.card{
+width:80%;
+margin:5%;
+border:1px solid black;
+box-shadow: 5px 5px #888888;
+margin-bottom: 20px;
 }
-#accountNavBar{
-  margin-left: 200px;
+#profilePicDiv{
+width: 40%;
+padding-left: 5%; 
+}
+#profileInfoDiv{
+width: 50%;
+padding-right: 5%;	 
 }
 
 button {
@@ -173,12 +183,6 @@ cursor: pointer;
 font-size: 15px;
 border-radius: 16px;
 }
-
 button:hover {
 background-color: gray;
-}
-
-#profilePicture{
-  height: 200px;
-  width: 200px;
 }

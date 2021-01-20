@@ -18,8 +18,8 @@
             <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
             <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i>Manage Business</a></li>
             <li><a href="http://127.0.0.1:5000/payments"><i class="fas fa-coins"></i>Payments</a></li>
-            <li><a href="renters.html"><i  class="fas fa-users"></i>Renters</a></li>
-            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
+            <li><a href="http://127.0.0.1:5000/renters"><i  class="fas fa-users"></i>Renters</a></li>
+            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i><strong>Reservations</strong></a></li>
             <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
@@ -51,8 +51,15 @@
               <h6>Waiting for Response</h6>
             </li>
             <li>
+              <div class="rectangle" style="background-color:#c4fffd;height:20px;width: 50px;border:1px solid black"></div>
+            </li>
+            <li>
+              <h6>Confirmed</h6>
+            </li>
+            <li>
               <div class="rectangle" style="background-color:white;height:20px;width: 50px;border:1px solid black"></div>
             </li>
+
             </ul>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -73,11 +80,13 @@
             {% if unit.1 == reservation.1%}
 
             {% if reservation.4=="WFOR"%}
-            <div style="border-radius: 10px;background-color:white;padding: 20px;border:1px solid black;">
+            <div style="border-radius: 10px;background-color:#c4fffd;padding: 20px;border:1px solid black;">
             {% elif reservation.4=="A" %}
             <div style="border-radius: 10px;background-color:#b0ffbe;padding: 20px;border:1px solid black;">
             {% elif reservation.4=="D"%}
             <div style="border-radius: 10px;background-color:#ffbaad;padding: 20px;border:1px solid black;">
+            {% else %}
+            <div style="border-radius: 10px;background-color:white;padding: 20px;border:1px solid black;">
             {% endif %}
             
 
@@ -103,7 +112,7 @@
             {% if reservation.4=="WFOR"%}
             <div align="center" style="margin-left:20%;margin-right: 20%; ">
             <a href="http://127.0.0.1:5000/accept/reservation/{{reservation.2}}"><button class="btn btn-success float-left">Accept</button></a>
-            <a href="#"><button class="btn btn-danger float-right">Decline</button></a>
+            <a href="http://127.0.0.1:5000/decline/reservation/{{reservation.2}}"><button class="btn btn-danger float-right">Decline</button></a>
             </div>
             <br>
             {% endif %}
