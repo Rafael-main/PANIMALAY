@@ -1,7 +1,7 @@
-import simplejson as json
 from datetime import datetime
 import base64
-from flask import Flask,flash,render_template, redirect, request,url_for,session
+import simplejson as json
+from flask import Flask,render_template, redirect, request,url_for,abort, session
 from app import app
 import app.accountModel as accounts
 import app.profileModel as profiles
@@ -12,52 +12,39 @@ import app.protocolmodel as protocol
 import app.servicemodel as service
 import app.paymentmodel as payments
 import app.unitimagesmodel as unitimages
-import app.feedbackmodel as feedback
-import app.reservationmodel as reservation
-import app.selectedModel as searches
 
 
+@app.route("/")
+def guestLandingPage():
+	return render_template("landingpage.html")
 
 @app.route("/signup")
 def signup():
-	if "username" in session and "accountType" in session:
-		return redirect(url_for("profile"))
-	else:
-		return render_template("signup.html",title="Signup to Panimalay")
+	return render_template("signup.html",title="Signup to Panimalay")
 
 @app.route("/signin")
 def signin():
-	if "username" in session and "accountType" in session:
-		return redirect(url_for("profile"))
-	else:
-		return render_template("signin.html",title="Signin to Panimalay")
+	return render_template("signin.html",title="Signin to Panimalay")
 
-@app.route("/")
-def landingPage():
-	if "username" in session:
-		username = session["username"]
-		accountType = session["accountType"]
-		return render_template("landingpage.html",username=username,accountType=accountType)
-	else:
-		return render_template("landingpage.html")
-
-@app.route("/login",methods=['POST'])
+@app.route("/login",methods=['POST','GET'])
 def login():
 	if request.method == "POST":
 		username =  request.form['username']
 		password =  request.form['password']
 		loginAccount = accounts.account()
 		if loginAccount.searchForLogin(username,password)==True:
-			accountType = loginAccount.accountData(username)
-			session["username"] = username
-			session["accountType"] = accountType[3]
-			print(accountType[3])
 			acc = accounts.account()
+			prof= profiles.profile()
 			data = acc.profileData(username)
-			if data[0][3]=="owner": 
-				return redirect(url_for('home'))
+			phoneNumber = prof.searchPhoneNumber(username)
+			file =  profilepic.profilePicture()
+			datum = file.retrieveFile(data[1][1])
+			if datum!=None:
+				datum = base64.b64encode(datum[2])
+				datum = datum.decode("UTF-8")
 			else:
-				return redirect(url_for('landingPage'))
+				datum = datum
+			return redirect(url_for('home',username=username))
 		elif loginAccount.searchForLogin(username,password)=="Invalid password!":
 			return render_template("signin.html",title="Signin to Panimalay",errorMsg1="Invalid password!",username=username,password=password)
 		else:
