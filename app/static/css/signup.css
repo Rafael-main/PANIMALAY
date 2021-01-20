@@ -1,0 +1,27 @@
+body{
+  background-image: url("../img/signupbg.jpg'");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Montserrat', sans-serif;
+}
+li{
+  display: inline;
+  list-style: none;
+  list-style-type: none;
+}
+button {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 8px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 2px 1px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 16px;
+}
+button:hover {
+background-color: gray;
+}

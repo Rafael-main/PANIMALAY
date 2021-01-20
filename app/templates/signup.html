@@ -7,7 +7,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>PANIMALAY</title>
 
     <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
@@ -46,11 +47,11 @@
            <div class="form-row">
              <div class="col-6 mt-3">
                <label for="firstName">First Name</label>
-               <input type="text" id="firstName" name="firstName" class="form-control is-valid" value="{{firstName}}" required="1">
+               <input type="text" id="firstName" name="firstName"  value="{{firstName}}" required="1">
              </div>
              <div class="col-6 mt-3">
                <label for="lastName">Last Name</label>
-               <input type="text" id="lastName" name="lastName" class="form-control is-valid" value="{{lastName}}" required="1">
+               <input type="text" id="lastName" name="lastName" value="{{lastName}}" required="1">
              </div>
              <div class="col-6 mt-3">
                 <label for="gender">Gender</label>
@@ -144,7 +145,8 @@
              </div>
             <div class="col-6 mt-3">
                 <label for="birthdate">Birthdate</label>
-                <input type="date" id="birthDate" name="birthDate" class="form-control" placeholder="Enter Birthday" required="1">
+                <input type="date" id="birthDate" name="birthDate" class="form-control" placeholder="Enter Birthday" max="2001-12-31" required="1">
+
             </div>
             <div class="col-12 mt-3">
                <label for="phoneNumber">Phone no.</label>
@@ -173,7 +175,7 @@
    </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script type="text/javascript" src="{{url_for('static',filename='js/signup.js')}}"></script>
+<script src="{{url_for('static',filename='js/signup.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 </body>
