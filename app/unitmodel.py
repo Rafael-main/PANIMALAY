@@ -72,9 +72,15 @@ class newUnit():
 		cur.execute("SELECT * FROM facilities WHERE unitID=%s",(unitid,))
 		checker = cur.fetchall()
 		if len(checker)==0:
+<<<<<<< HEAD
+			cur.execute("INSERT INTO facilities(unitID,facility) VALUES (%s,%s)",(unitID,self.facilities))
+		else:
+			cur.execute("UPDATE facilities(unitID,facility) VALUES (%s,%s)",(unitID,self.facilities))
+=======
 			cur.execute("INSERT INTO facilities(unitID,facility) VALUES (%s,%s)",(unitid,self.facilities))
 		else:
 			cur.execute("UPDATE facilities SET facility=%s WHERE unitID=%s",(self.facilities,unitid))
+>>>>>>> main
 		mysql.connection.commit()
 
 	@classmethod
@@ -159,6 +165,8 @@ class newUnit():
 		return data
 
 
+<<<<<<< HEAD
+=======
 	@classmethod
 	def renterInfo(cls):
 		cur = mysql.connection.cursor()
@@ -170,3 +178,4 @@ class newUnit():
 			INNER JOIN accounts ON profiles.username = accounts.username""")
 		renters = cur.fetchall()
 		return renters
+>>>>>>> main

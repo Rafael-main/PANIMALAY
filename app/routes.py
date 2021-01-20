@@ -14,14 +14,12 @@ import app.protocolmodel as protocol
 import app.servicemodel as service
 import app.paymentmodel as payments
 import app.unitimagesmodel as unitimages
+import app.feedbackmodel as feedback
+import app.reservationmodel as reservation
+import app.selectedModel as searches
 
 
-@app.route("/")
-def guestLandingPage():
-	return render_template("landingpage.html")
 
-
-	
 @app.route("/signup")
 def signup():
 	return render_template("signup.html",title="Signup to Panimalay")
@@ -30,26 +28,30 @@ def signup():
 def signin():
 	return render_template("signin.html",title="Signin to Panimalay")
 
+@app.route("/")
+def landingPage():
+	if "username" in session:
+		username = session["username"]
+		return render_template("landingpage.html",username=username)
+	else:
+		return render_template("landingpage.html")
 
-@app.route("/login",methods=['POST','GET'])
+@app.route("/login",methods=['POST'])
 def login():
 	if request.method == "POST":
 		username =  request.form['username']
 		password =  request.form['password']
 		loginAccount = accounts.account()
 		if loginAccount.searchForLogin(username,password)==True:
+			accountType = loginAccount.accountData(username)
+			session["username"] = username
+			session["accountType"] = accountType[3]
 			acc = accounts.account()
-			prof= profiles.profile()
 			data = acc.profileData(username)
-			phoneNumber = prof.searchPhoneNumber(username)
-			file =  profilepic.profilePicture()
-			datum = file.retrieveFile(data[1][1])
-			if datum!=None:
-				datum = base64.b64encode(datum[2])
-				datum = datum.decode("UTF-8")
+			if data[0][3]=="owner": 
+				return redirect(url_for('home'))
 			else:
-				datum = datum
-			return redirect(url_for('home',username=username))
+				return redirect(url_for('landingPage'))
 		elif loginAccount.searchForLogin(username,password)=="Invalid password!":
 			return render_template("signin.html",title="Signin to Panimalay",errorMsg1="Invalid password!",username=username,password=password)
 		else:

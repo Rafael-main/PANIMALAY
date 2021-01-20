@@ -40,7 +40,6 @@ class profile():
 		mysql.connection.commit()
 
 
-
 	def allProfiles(self):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM profiles")
@@ -92,4 +91,3 @@ class profile():
 		cur.execute("SELECT * FROM profiles WHERE username=%s",(usrnm,))
 		profile = cur.fetchall()
 		return profile
-

@@ -86,9 +86,18 @@ class Search():
         cur.execute("""SELECT units.unitID,facilities.facility FROM units
         INNER JOIN facilities ON units.unitID = facilities.unitID
         WHERE units.unitID = %s""", (unit_id,))
+<<<<<<< HEAD
+        result = cur.fetchall()
+        fclt = list()
+        for res in result:
+            fclt.append(res[1])
+        return fclt
+
+=======
         result = cur.fetchone()
         facilities = result[1].split(",")
         return facilities
+>>>>>>> main
     @classmethod
     def selectedSearchLocations(cls, unit_id):
         cur = mysql.connection.cursor()
@@ -119,6 +128,9 @@ class Search():
     	cur.execute("SELECT * FROM feedbacks WHERE unitID=%s",(unit_id,))
     	feedbacks = cur.fetchall()
     	return feedbacks
+<<<<<<< HEAD
+	
+=======
 	
 
     @classmethod
@@ -152,3 +164,4 @@ class Search():
         else:
             return False
 
+>>>>>>> main
