@@ -70,3 +70,23 @@ class account():
 		cur = mysql.connection.cursor()
 		cur.execute("UPDATE accounts SET email=%s,password=%s WHERE username=%s",(self.email,self.password,self.username))
 		mysql.connection.commit()
+
+	@classmethod
+	def accountData(cls,username):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM accounts WHERE username=%s",(username,))
+		acccountData = cur.fetchone()
+		return acccountData
+
+	@classmethod
+	def changeEmail(cls,username,newEmail):
+		cur = mysql.connection.cursor()
+		cur.execute("UPDATE accounts SET email=%s WHERE username=%s",(newEmail,username))
+		mysql.connection.commit()
+
+	@classmethod
+	def changePassword(cls,username,newPassword):
+		cur = mysql.connection.cursor()
+		cur.execute("UPDATE accounts SET password=%s WHERE username=%s",(newPassword,username))
+		mysql.connection.commit()
+

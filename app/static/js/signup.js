@@ -17,7 +17,7 @@ $(document).ready(function(){
 			alert("First Name must not contain special characters");
 		}
 
-		else if  ((/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/).test(lastName)){
+		else if  ((/[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/).test(lastName)){
 			e.preventDefault(e);
 			alert("Last Name must not contain special characters");
 		}
