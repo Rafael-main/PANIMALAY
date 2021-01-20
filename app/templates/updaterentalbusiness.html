@@ -14,24 +14,24 @@
     <div class="sidebar">
         <h2>PANIMALAY</h2>
         <ul>
-            <li><a href="http://127.0.0.1:5000/home/{{username}}"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="http://127.0.0.1:5000/profile/{{username}}"><i class="fas fa-id-card"></i>Profile</a></li>
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
-            <li><a href="http://127.0.0.1:5000/payments/{{username}}"><i class="fas fa-coins"></i>Payments</a></li>
-            <li><a href="renters.html"><i  class="fas fa-users"></i>Renters</a></li>
-            <li><a href="#"><i class="fas fa-project-diagram"></i>Reservations</a></li>
-            <li><a href="http://127.0.0.1:5000/account/{{username}}"><i class="fas fa-user-cog"></i>Account</a></li>
-            <li><a href=""><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
+            <li><a href="http://127.0.0.1:5000/payments"><i class="fas fa-coins"></i>Payments</a></li>
+            <li><a href="http://127.0.0.1:5000/renters"><i  class="fas fa-users"></i>Renters</a></li>
+            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
+            <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
     </div>
 
         <div class="main_content">
           <div id="rentalBusinessInfo">
           <ul id="manageBusinessNavBar" >
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}" style="color:white;border-bottom: .5rem solid;">Information</a></li>
-            <li><a href="http://127.0.0.1:5000/units/of/{{username}}" style="color: white;">Units</a></li>
-            <li><a href="http://127.0.0.1:5000/business/protocols/{{username}}/{{rentalBusinessInfo.2}}" style="color: white;">Protocols</a></li>
-            <li><a href="http://127.0.0.1:5000/business/services/{{username}}/{{rentalBusinessInfo.2}}" style="color: white;">Services</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business" style="color:white;border-bottom: .5rem solid;">Information</a></li>
+            <li><a href="http://127.0.0.1:5000/units" style="color: white;">Units</a></li>
+            <li><a href="http://127.0.0.1:5000/business/protocols/{{rentalBusinessInfo.2}}" style="color: white;">Protocols</a></li>
+            <li><a href="http://127.0.0.1:5000/business/services/{{rentalBusinessInfo.2}}" style="color: white;">Services</a></li>
           </ul>  
           </div>
           <br>
@@ -55,7 +55,7 @@
            </form>
            <br>
            <div align="center">
-             <a href="http://127.0.0.1:5000/manage/business/{{username}}"><button>Close</button></a>
+             <a href="http://127.0.0.1:5000/manage/business"><button>Close</button></a>
            </div>
           </div>
         </div>        

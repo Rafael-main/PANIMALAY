@@ -3,7 +3,7 @@ import random, string
 
 
 class newUnit():
-	def __init__(self,username=None,unitType=None,genderAccommodation=None,capacity=None,rate=None,street=None,barangay=None,city=None,zipcode=None,latitude=None,longitude=None,facilities=None):
+	def __init__(self,username=None,unitType=None,genderAccommodation=None,capacity=None,rate=None,street=None,barangay=None,cityOrMunicipality=None,province=None,latitude=None,longitude=None,facilities=None):
 		self.username = username
 		self.unitType = unitType
 		self.genderAccommodation = genderAccommodation
@@ -11,8 +11,8 @@ class newUnit():
 		self.rate = rate
 		self.street = street
 		self.barangay = barangay
-		self.city = city 
-		self.zipcode = zipcode
+		self.cityOrMunicipality = cityOrMunicipality 
+		self.province = province
 		self.latitude = latitude
 		self.longitude = longitude
 		self.facilities = facilities
@@ -52,9 +52,11 @@ class newUnit():
 			else:
 				flag = 1
 		if flag == 1:
-			cur.execute("INSERT INTO locations(unitID,locationID,latitude,longitude,street,barangay,city,zipcode) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(unitID,locationID,self.latitude,self.longitude,self.street,self.barangay,self.city,self.zipcode))
+			cur.execute("INSERT INTO locations(unitID,locationID,latitude,longitude,street,barangay,cityOrMunicipality,province) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(unitID,locationID,self.latitude,self.longitude,self.street,self.barangay,self.cityOrMunicipality,self.province))
 		cur.execute("INSERT INTO facilities(unitID,facility) VALUES (%s,%s)",(unitID,self.facilities))
 		mysql.connection.commit()
+
+
 	@classmethod
 	def searchUnit(cls,rbid):
 		cur = mysql.connection.cursor()
@@ -65,8 +67,14 @@ class newUnit():
 	def updateUnit(self,unitid):
 		cur = mysql.connection.cursor()
 		cur.execute("UPDATE units SET capacity=%s,rate=%s,unitType=%s,genderAccommodation=%s WHERE unitID=%s",(self.capacity,self.rate,self.unitType,self.genderAccommodation,unitid))
-		cur.execute("UPDATE locations SET latitude=%s,longitude=%s,street=%s,barangay=%s,city=%s,zipcode=%s WHERE unitID=%s",(self.latitude,self.longitude,self.street,self.barangay,self.city,self.zipcode,unitid))
-		cur.execute("UPDATE facilities SET facility=%s WHERE unitID=%s",(self.facilities,unitid))
+		cur.execute("UPDATE locations SET latitude=%s,longitude=%s,street=%s,barangay=%s,cityOrMunicipality=%s,province=%s WHERE unitID=%s",(self.latitude,self.longitude,self.street,self.barangay,self.cityOrMunicipality,self.province,unitid))
+
+		cur.execute("SELECT * FROM facilities WHERE unitID=%s",(unitid,))
+		checker = cur.fetchall()
+		if len(checker)==0:
+			cur.execute("INSERT INTO facilities(unitID,facility) VALUES (%s,%s)",(unitid,self.facilities))
+		else:
+			cur.execute("UPDATE facilities SET facility=%s WHERE unitID=%s",(self.facilities,unitid))
 		mysql.connection.commit()
 
 	@classmethod
@@ -89,3 +97,76 @@ class newUnit():
 		cur.execute("SELECT * FROM facilities WHERE unitID=%s",(unitid,))
 		unitToUpdateFacilities = cur.fetchone()
 		return unitToUpdateFacilities
+
+	@classmethod
+	def delUnit(cls,unitid):
+		cur = mysql.connection.cursor()
+		cur.execute("DELETE FROM units WHERE unitID=%s",(unitid,))
+		mysql.connection.commit()
+
+	@classmethod
+	def searchResult(cls,location,unittype,genderAcco,cap):
+		cur = mysql.connection.cursor()
+		cur.execute("SET @locationInput=%s",(location,))
+		cur.execute("SET @unittypeInput=%s",(unittype,))
+		cur.execute("SET @genderAccoInput=%s",(genderAcco,))
+		cur.execute("SET @capInput=%s",(cap,))
+		cur.execute("""SELECT * FROM (SELECT units.unitID,units.RBID,units.capacity,units.rate,units.unitType,units.genderAccommodation,locations.locationID,locations.latitude,locations.longitude,locations.street,locations.barangay,locations.cityOrMunicipality,locations.province
+		FROM units
+		INNER JOIN locations
+		ON units.unitID=locations.unitID) AS unitsInfo
+		WHERE (street LIKE CONCAT('%',@locationInput,'%') or barangay LIKE CONCAT('%',@locationInput,'%') or cityOrMunicipality LIKE CONCAT('%',@locationInput,'%')  or province LIKE CONCAT('%',@locationInput,'%')) and 
+				 unitType=@unittypeInput and  genderAccommodation=@genderAccoInput and capacity=@capInput;""")
+		data = cur.fetchall()
+		return data		
+
+	@classmethod
+	def searchAllRentalBusiness(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM rentalbusiness")
+		rentalBusinesses = cur.fetchall()
+		return rentalBusinesses
+
+	@classmethod
+	def searchAllUnitLocation(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM locations")
+		unitLocations = cur.fetchall()
+		return unitLocations
+
+	@classmethod
+	def searchAllUnitImages(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("""SELECT units.unitID,images.imageID,images.filename,images.datum 
+			FROM units INNER JOIN unitimages ON units.unitID = unitimages.unitID
+			INNER JOIN images
+			ON unitimages.imageID = images.imageID""")
+		unitImages = cur.fetchall()
+		return unitImages
+
+	@classmethod
+	def searchAllunits(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM units")
+		data = cur.fetchall()
+		return data
+
+	@classmethod
+	def renters(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM renters")
+		data = cur.fetchall()
+		return data
+
+
+	@classmethod
+	def renterInfo(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("""SELECT profiles.username,profiles.firstName,profiles.lastName,profiles.birthdate,profiles.sex,accounts.email,profiles.profileID,profilephonenumber.phoneNumber,renters.unitID,units.RBID,renters.checkinDate FROM profilepictures
+			INNER JOIN profilephonenumber ON profilepictures.profileID = profilephonenumber.profileID
+			INNER JOIN profiles ON profilepictures.profileID = profiles.profileID
+			INNER JOIN renters ON profiles.username = renters.username
+			INNER JOIN units ON renters.unitID = units.unitID
+			INNER JOIN accounts ON profiles.username = accounts.username""")
+		renters = cur.fetchall()
+		return renters

@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>PANIMALAY</title>
-  <link rel="stylesheet" href="styles.css">
+  <title></title>
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/services_style.css')}}">
 </head>
 <body>
@@ -17,61 +13,127 @@
 
         <h2>PANIMALAY</h2>
         <ul>
-            <li><a href="http://127.0.0.1:5000/home/{{username}}"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="http://127.0.0.1:5000/profile/{{username}}"><i class="fas fa-id-card"></i>Profile</a></li>
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
-            <li><a href="http://127.0.0.1:5000/payments/{{username}}"><i class="fas fa-coins"></i>Payments</a></li>
-            <li><a href="renters.html"><i  class="fas fa-users"></i>Renters</a></li>
-            <li><a href="#"><i class="fas fa-project-diagram"></i>Reservations</a></li>
-            <li><a href="http://127.0.0.1:5000/account/{{username}}"><i class="fas fa-user-cog"></i>Account</a></li>
-            <li><a href=""><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
+            <li><a href="http://127.0.0.1:5000/payments"><i class="fas fa-coins"></i>Payments</a></li>
+            <li><a href="http://127.0.0.1:5000/renters"><i  class="fas fa-users"></i>Renters</a></li>
+            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
+            <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
     </div>
     <div class="main_content">
       <div id="rentalBusinessInfo">
           <ul id="manageBusinessNavBar" >
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}" style="color: white;">Information</a></li>
-            <li><a href="http://127.0.0.1:5000/units/of/{{username}}" style="color: white;">Units</a></li>
-            <li><a href="http://127.0.0.1:5000/business/protocols/{{username}}/{{RBID}}" style="color: white;">Protocols</a></li>
-            <li><a href="http://127.0.0.1:5000/business/services/{{username}}/{{RBID}}" style="color:white;border-bottom: .5rem solid;">Services</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business" style="color: white;">Information</a></li>
+            <li><a href="http://127.0.0.1:5000/units" style="color: white;">Units</a></li>
+            <li><a href="http://127.0.0.1:5000/business/protocols/{{RBID}}" style="color:white;">Protocols</a></li>
+            <li><a href="http://127.0.0.1:5000/business/services/{{RBID}}" style="color: white;border-bottom: .5rem solid;">Services</a></li>
           </ul>  
       </div>
-          <br>
-       <hr>
-       {% if RBID is defined and RBID!="noRBID" %}
-       <h3>Services</h3>
+     <br>
+     <br>
+      {% if RBID is defined and RBID!="noRBID" %}
+     <button class="btn btn-success" data-toggle="modal" data-target="#addModal">Add Service</button>
+     <br>
+     <br>
+     <table class="table">
+  <thead>
+    <tr>
+      <th scope="col" style="padding-right: 450px;">Service</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {% if services!=None %}
+      {% for service in services %}
+      <td style="margin-right: 450px;">{{service.2}}</td>
+      <td><button class="btn btn-primary" data-toggle="modal" data-target="#updateModal{{service.0}}"><i class="fas fa-edit"></i></button><button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{service.0}}"><i class="fas fa-trash"></i></button></td>
+    </tr>
+  </tbody>
+<div id="updateModal{{service.0}}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" style="text-align:left"><strong><i>Update Service</i></strong></h4>
+          <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+        </div>
 
-
-       {% if service!=None %}
-      <form action="http://127.0.0.1:5000/update/service/{{username}}/{{RBID}}" method="POST">
-        <div class="col-16 mt-3">
-          <textarea id="services" name="services" style="height: 250px;">{{service}}</textarea>
-        </div>
-         <div id="buttonDiv">
+        <div class="modal-body">
+          <form action="http://127.0.0.1:5000/update/service/{{username}}/{{RBID}}/{{service.0}}" method="POST">
+            <div class="col-12 mt-3">
+              <label for="service">Service:</label>
+              <textarea class="form-control" type="text" name="service" id="service" required="1" maxlength="255">{{service.2}}</textarea>
+            </div>
             <br>
-            <button type="submit">Save</button>
-            <a href="http://127.0.0.1:5000/units/of/{{username}}"><button>Cancel</button></a>
-        </div>
-      </form>
-      {% else %}
-       <form action="http://127.0.0.1:5000/add/service/{{username}}/{{RBID}}" method="POST">
-        <div class="col-16 mt-3">
-          <textarea id="services" name="services" style="height: 250px;"></textarea>
-        </div>
-        <div id="buttonDiv">
             <br>
-            <button type="submit">Save</button>
-            <a href="http://127.0.0.1:5000/units/of/{{username}}"><button>Cancel</button></a>
+            <div>
+              <button class="btn btn-primary float-left">Update</button>
+              <button class="btn btn-danger float-right">Cancel</button>
+            </div>
+          </form>
         </div>
-      </form>
-      {% endif %}
-    </div>
-    {% else %}
-      <div style="padding-bottom: 700px;">
-        <h4>Please add rental business first..<a href="http://127.0.0.1:5000/manage/business/{{username}}" style="color: black;">Click Here</a></h4>
-      </div>
-    {% endif %}
+     </div>
+  </div>
 </div>
+<div id="deleteModal{{service.0}}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" style="text-align:left"><strong><i>Are you sure you want to delete this service?</i></strong></h4>
+          <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <form action="http://127.0.0.1:5000/delete/service/{{username}}/{{RBID}}/{{service.0}}" method="POST">
+          <div>
+            <button type="submit" class="btn btn-success">Yes</button>
+            <button class="btn btn-danger float-right" data-dismiss="modal">No</button>
+          </div>
+          </form>
+        </div>
+     </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+<div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" style="text-align:left"><strong><i>Add Service</i></strong></h4>
+          <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <form action="http://127.0.0.1:5000/add/service/{{username}}/{{RBID}}" method="POST">
+            <div class="col-12 mt-3">
+              <label for="service">Service:</label>
+              <textarea class="form-control" type="text" name="service" id="service" required="1" maxlength="255"></textarea>
+            </div>
+            <br>
+            <br>
+            <div>
+              <button class="btn btn-success float-left">Add</button>
+              <button class="btn btn-danger float-right" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+     </div>
+  </div>
+</div>
+</table>
+{% else %}
+<div style="padding-bottom: 700px;">
+  <h4>Please add rental business first..<a href="http://127.0.0.1:5000/manage/business" style="color: black;">Click Here</a></h4>
+</div>
+{% endif %}
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>

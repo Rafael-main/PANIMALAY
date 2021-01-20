@@ -1,5 +1,6 @@
 from app import app,mysql
 import random, string
+import base64
 
 class unitImages():
 	def __init__(self,filename=None,datum=None):
@@ -39,6 +40,25 @@ class unitImages():
 
 	def deleteImages(self,imageID):
 		cur = mysql.connection.cursor()
-		cur.execute("DELETE FROM unitimages WHERE imageID=%s",(imageID))
-		cur.execute("DELETE FROM images WHERE imageID=%s",(imageID))
+		cur.execute("DELETE FROM unitimages WHERE imageID=%s",(imageID,))
+		cur.execute("DELETE FROM images WHERE imageID=%s",(imageID,))
 		mysql.connection.commit()
+
+	@classmethod
+	def selected(cls, unit_id):
+		cur = mysql.connection.cursor()
+		cur.execute("""SELECT images.filename,images.datum
+			FROM units INNER JOIN unitimages ON units.unitID = unitimages.unitID
+			INNER JOIN images
+			ON unitimages.imageID = images.imageID
+			WHERE units.unitID = %s""", (unit_id,))
+		res = cur.fetchall()
+		images = list()
+		image_dct = dict()
+		for result in res:
+			image_dct['filename'] = result[0]
+			blob = base64.b64encode(result[1])
+			blob = blob.decode("UTF-8")
+			image_dct['datum'] = blob
+			images.append(image_dct)
+			return images

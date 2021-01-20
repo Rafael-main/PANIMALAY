@@ -22,23 +22,23 @@
 
         <h2>PANIMALAY</h2>
         <ul>
-            <li><a href="http://127.0.0.1:5000/home/{{username}}"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="http://127.0.0.1:5000/profile/{{username}}"><i class="fas fa-id-card"></i>Profile</a></li>
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
-            <li><a href="http://127.0.0.1:5000/payments/{{username}}"><i class="fas fa-coins"></i>Payments</a></li>
-            <li><a href="renters.html"><i  class="fas fa-users"></i>Renters</a></li>
-            <li><a href="#"><i class="fas fa-project-diagram"></i>Reservations</a></li>
-            <li><a href="http://127.0.0.1:5000/account/{{username}}"><i class="fas fa-user-cog"></i>Account</a></li>
-            <li><a href=""><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
+            <li><a href="http://127.0.0.1:5000/payments"><i class="fas fa-coins"></i>Payments</a></li>
+            <li><a href="http://127.0.0.1:5000/renters"><i  class="fas fa-users"></i>Renters</a></li>
+            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
+            <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
     </div>
     <div class="main_content">
       <div id="rentalBusinessInfo">
           <ul id="manageBusinessNavBar" >
-            <li><a href="http://127.0.0.1:5000/manage/business/{{username}}" style="color: white;">Information</a></li>
-            <li><a href="http://127.0.0.1:5000/units/of/{{username}}" style="color:white;border-bottom: .5rem solid;">Units</a></li>
-            <li><a href="http://127.0.0.1:5000/business/protocols/{{username}}/{{ownedUnitToUpdate.0}}" style="color: white;">Protocols</a></li>
-            <li><a href="http://127.0.0.1:5000/business/services/{{username}}/{{ownedUnitToUpdate.0}}" style="color: white;">Services</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business" style="color: white;">Information</a></li>
+            <li><a href="http://127.0.0.1:5000/units" style="color:white;border-bottom: .5rem solid;">Units</a></li>
+            <li><a href="http://127.0.0.1:5000/business/protocols/{{ownedUnitToUpdate.0}}" style="color: white;">Protocols</a></li>
+            <li><a href="http://127.0.0.1:5000/business/services/{{ownedUnitToUpdate.0}}" style="color: white;">Services</a></li>
           </ul>  
           </div>
           <br>
@@ -115,34 +115,143 @@
           </div>
 
           <div class="col-6 mt-3">
-            <label for="city">City</label>
-            <input class="form-control" type="text" name="city" id="city" required="1" value="{{ownedUnitToUpdateLocation.6}}">
+            <label for="city">City/Municipality</label>
+            <input class="form-control" type="text" name="cityOrMunicipality" id="cityOrMunicipality" required="1" value="{{ownedUnitToUpdateLocation.6}}">
           </div>
 
           <div class="col-6 mt-3">
-            <label for="zipcode">Zipcode</label>
-            <input class="form-control" type="text" maxlength="4" id="zipcode" name="zipcode" required="1" value="{{ownedUnitToUpdateLocation.7}}">
+            <label for="zipcode">Province</label>
+            <input class="form-control" type="text" id="province" name="province" required="1" value="{{ownedUnitToUpdateLocation.7}}">
           </div>
+          
           <div class="col-12 mt-3">
-            <label for="facilities">Facilities</label>
-            <textarea class="form-control" id="facilities" name="facilities" maxlength="255">{{ownedUnitToUpdateFacilities.1}}</textarea>
-          </div>
+            <label>Amenities</label>
+            <input type="hidden" name="facilities" id="facilities">
+            <div class="row" style="margin-left: 50px;">
+
+            <div id="bed" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-bed fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="comfortroom" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-toilet fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="aircoolingsystem" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-fan fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+            
+            <div id="studyarea" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-book-reader fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="wifizone" class="column" style="width:10%;cursor:pointer;"> 
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-wifi fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="shower" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-shower fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+            </div>
+            <br>
+            </div>
+            
+
+            <div id="amenitiesdisplay" class="form-control" style="height: 10%;padding-top: 15px;">
+              <ul id="facilitiesButton">
+              <li>
+              <span id="bedCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Bed<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="bedCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="comfortroomCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Comfort Room<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="comfortroomCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="aircoolingsystemCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Air Cooling System<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="aircoolingsystemCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="studyareaCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Study Area<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="studyareaCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="wifizoneCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">WiFi Zone<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="wifizoneCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="showerCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Shower<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="showerCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              </ul>
+            </div>
+
+          
           <div>
             <input type="hidden" name="username" id="username" value="{{username}}">
-            <input type="hidden" name="latitude" id="latitude" value="">
-            <input type="hidden" name="longitude" id="longitude" value="">
+            <input type="hidden" name="latitude" id="latitude" value="{{ownedUnitToUpdateLocation.2}}">
+            <input type="hidden" name="longitude" id="longitude" value="{{ownedUnitToUpdateLocation.3}}">
           </div>
          
-          <div id="buttonDiv">
+        </div>
+        <div align="center">
             <br>
             <button type="submit" name="addUnitBtn">Update Unit</button>
-            <a href="http://127.0.0.1:5000/units/of/{{username}}"><button>Cancel</button></a>
           </div>
-        </div>
       </form>
+      <br>
+      <div align="center">
+         <a href="http://127.0.0.1:5000/units"><button>Cancel</button></a>
+      </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+  $(document).ready(function(){
+    var facilities = {{ownedUnitToUpdateFacilities|safe}};
+    if (facilities.includes("bed")===false){
+       $("#bedCaption").hide();
+    }
+    if (facilities.includes("comfort room")===false){
+       $("#comfortroomCaption").hide();
+    }
+    if (facilities.includes("air cooling system")===false){
+       $("#aircoolingsystemCaption").hide();
+    }
+    if (facilities.includes("study area")===false){
+       $("#studyareaCaption").hide();
+    }
+    if (facilities.includes("wifi zone")===false){
+       $("#wifizoneCaption").hide();
+    }
+    if (facilities.includes("shower")===false){
+       $("#showerCaption").hide();
+    }
+   
+
+   
+
+
+  });
+</script>
 <script src="{{url_for('static',filename='js/updateunit.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>

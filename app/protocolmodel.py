@@ -1,26 +1,33 @@
 from app import app,mysql
-class newProtocols():
-	def __init__(self,protocols=None,RBID=None):
-		self.protocols = protocols
+class newProtocol():
+	def __init__(self,protocol=None,RBID=None):
+		self.protocol = protocol
 		self.RBID = RBID
 
-	def addProtocols(self):
+	def addProtocol(self):
 		cur = mysql.connection.cursor()
-		cur.execute("INSERT INTO protocols(RBID,protocol) VALUES (%s,%s)",(self.RBID,self.protocols))
+		cur.execute("INSERT INTO protocols(RBID,protocol) VALUES (%s,%s)",(self.RBID,self.protocol))
 		mysql.connection.commit()
 
 	@classmethod
-	def searchProtocol(cls,rbid):
+	def searchProtocols(cls,rbid):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM protocols WHERE RBID=%s",(rbid,))
-		protocol = cur.fetchone()
-		if protocol!=None:
-			protocol = protocol[1]
+		protocols = cur.fetchall()
+		if protocols!=None:
+			return protocols
 		else:
-			protocol = None
-		return protocol
+			protocols = None
+			return protocols
 
-	def updateProtocols(self):
+	@classmethod
+	def updatePrtcl(cls,prtcl,protocolno):
 		cur = mysql.connection.cursor()
-		cur.execute("UPDATE protocols SET protocol=%s WHERE RBID=%s",(self.protocols,self.RBID))
+		cur.execute("UPDATE protocols SET protocol=%s WHERE protocolNo=%s",(prtcl,protocolno))
+		mysql.connection.commit()
+
+	@classmethod
+	def deletePrtcl(cls,protocolno):
+		cur = mysql.connection.cursor()
+		cur.execute("DELETE FROM protocols WHERE protocolNo=%s",(protocolno,))
 		mysql.connection.commit()

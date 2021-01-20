@@ -44,6 +44,12 @@ class rentalBusiness():
 		phoneNumber = phoneNumber[1]
 		return phoneNumber
 
+	@classmethod
+	def searchAllRentalBusinessPhoneNumber(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM rentalbusinessphonenumber")
+		phoneNumbers = cur.fetchall()
+		return phoneNumbers
 	
 	def updateRentalBusiness(self,rbid):
 		cur = mysql.connection.cursor()
