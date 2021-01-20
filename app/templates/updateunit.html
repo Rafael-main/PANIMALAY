@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PANIMALAY</title>
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/updateunit_style.css')}}">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+
+        <h2>PANIMALAY</h2>
+        <ul>
+            <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
+            <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i><strong>Manage Business</strong></a></li>
+            <li><a href="http://127.0.0.1:5000/payments"><i class="fas fa-coins"></i>Payments</a></li>
+            <li><a href="http://127.0.0.1:5000/renters"><i  class="fas fa-users"></i>Renters</a></li>
+            <li><a href="http://127.0.0.1:5000/owner/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
+            <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        </ul> 
+    </div>
+    <div class="main_content">
+      <div id="rentalBusinessInfo">
+          <ul id="manageBusinessNavBar" >
+            <li><a href="http://127.0.0.1:5000/manage/business" style="color: white;">Information</a></li>
+            <li><a href="http://127.0.0.1:5000/units" style="color:white;border-bottom: .5rem solid;">Units</a></li>
+            <li><a href="http://127.0.0.1:5000/business/protocols/{{ownedUnitToUpdate.0}}" style="color: white;">Protocols</a></li>
+            <li><a href="http://127.0.0.1:5000/business/services/{{ownedUnitToUpdate.0}}" style="color: white;">Services</a></li>
+          </ul>  
+          </div>
+          <br>
+       <p>Note: If you want add unit be sure that you're in the current location where it is located. Otherwise Map Marker would be inaccurate. Click locate first! </p>
+       <div align="center">
+       <button id="locate" style="background-color: white;color: black;"><img src="{{url_for('static',filename='images/mapmarker.png')}}" style="max-width:30px;max-height: 30px;">Locate</button>
+       </div>
+       <h2>Unit Information:</h2>
+       <hr>
+      <form action="http://127.0.0.1:5000/update/unit/{{username}}/{{ownedUnitToUpdate.1}}" method="POST" id="unitForm">
+        <div class="form-row">
+          <div class="col-6 mt-3">
+            <label for="unitType">Unit Type</label>
+            <select class="form-control" name="unitType" id="unitType" required="1">
+              {% if ownedUnitToUpdate.4 == "Dorm" %}
+              <option disabled ></option>
+              <option value="Dorm" selected>Dorm</option>
+              <option value="Appartment">Appartment</option>
+              <option value="Boarding House">Boarding House</option>
+              {% elif  ownedUnitToUpdate.4 == "Appertment" %}
+              <option disabled ></option>
+              <option value="Dorm">Dorm</option>
+              <option value="Appartment" selected>Appartment</option>
+              <option value="Boarding House">Boarding House</option>
+              {% else %}
+              <option disabled ></option>
+              <option value="Dorm">Dorm</option>
+              <option value="Appartment">Appartment</option>
+              <option value="Boarding House" selected>Boarding House</option>
+              {% endif %}
+            </select>
+          </div>
+          <div class="col-6 mt-3">
+            <label for="genderAccomodation">Gender Accommodation</label>
+            <select class="form-control" name="genderAccommodation" id="genderAccommodation" required="1">
+              {% if ownedUnitToUpdate.5 == "Male" %}
+              <option disabled></option>
+              <option value="Male" selected>Male</option>
+              <option value="Female">Female</option>
+              <option value="Unisex">Unisex</option>
+              {% elif ownedUnitToUpdate.5 == "Female" %}
+              <option disabled></option>
+              <option value="Male">Male</option>
+              <option value="Female" selected>Female</option>
+              <option value="Unisex">Unisex</option>
+              {% else %}
+              <option disabled></option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Unisex" selected>Unisex</option>
+              {% endif %}
+            </select>
+          </div>
+
+          <div class="col-6 mt-3">
+
+            <label for="capacity">Capacity</label>
+            <input class="form-control" type="number" name="capacity" id="capacity" required="1" value="{{ownedUnitToUpdate.2}}">
+          </div>
+        
+          <div class="col-6 mt-3">
+            <label for="rate">Rate</label>
+            <input class="form-control" type="number" name="rate" id="rate" required="1" value="{{ownedUnitToUpdate.3}}">  
+          </div>
+          
+          <div class="col-6 mt-3">
+            <label for="street">Street</label>
+            <input class="form-control" type="text" name="street" id="street" required="1" value="{{ownedUnitToUpdateLocation.4}}">
+          </div>
+
+          <div class="col-6 mt-3">
+            <label for="barangay">Barangay</label>
+            <input class="form-control" type="text" name="barangay" id="barangay" required="1" value="{{ownedUnitToUpdateLocation.5}}">
+          </div>
+
+          <div class="col-6 mt-3">
+            <label for="city">City/Municipality</label>
+            <input class="form-control" type="text" name="cityOrMunicipality" id="cityOrMunicipality" required="1" value="{{ownedUnitToUpdateLocation.6}}">
+          </div>
+
+          <div class="col-6 mt-3">
+            <label for="zipcode">Province</label>
+            <input class="form-control" type="text" id="province" name="province" required="1" value="{{ownedUnitToUpdateLocation.7}}">
+          </div>
+          
+          <div class="col-12 mt-3">
+            <label>Amenities</label>
+            <input type="hidden" name="facilities" id="facilities">
+            <div class="row" style="margin-left: 50px;">
+
+            <div id="bed" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-bed fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="comfortroom" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-toilet fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="aircoolingsystem" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-fan fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+            
+            <div id="studyarea" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-book-reader fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="wifizone" class="column" style="width:10%;cursor:pointer;"> 
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-wifi fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+
+            <div id="shower" class="column" style="width:10%;cursor:pointer;">
+            <div class="card">
+              <div class="card-body">
+                <h6><i class="fas fa-shower fa-2x"></i></h6>
+              </div>
+            </div>
+            </div>
+            </div>
+            <br>
+            </div>
+            
+
+            <div id="amenitiesdisplay" class="form-control" style="height: 10%;padding-top: 15px;">
+              <ul id="facilitiesButton">
+              <li>
+              <span id="bedCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Bed<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="bedCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="comfortroomCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Comfort Room<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="comfortroomCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="aircoolingsystemCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Air Cooling System<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="aircoolingsystemCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="studyareaCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Study Area<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="studyareaCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="wifizoneCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">WiFi Zone<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="wifizoneCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              <li>
+              <span id="showerCaption" style="background-color: black;color: white;border-radius: 10px;height: 20px;padding: 5px;margin:5px;">Shower<i style="margin-right: 5px;margin-left:5px;cursor:pointer;" id="showerCaptionHide" class="fas fa-times-circle"></i></span>
+              </li>
+              </ul>
+            </div>
+
+          
+          <div>
+            <input type="hidden" name="username" id="username" value="{{username}}">
+            <input type="hidden" name="latitude" id="latitude" value="{{ownedUnitToUpdateLocation.2}}">
+            <input type="hidden" name="longitude" id="longitude" value="{{ownedUnitToUpdateLocation.3}}">
+          </div>
+         
+        </div>
+        <div align="center">
+            <br>
+            <button type="submit" name="addUnitBtn">Update Unit</button>
+          </div>
+      </form>
+      <br>
+      <div align="center">
+         <a href="http://127.0.0.1:5000/units"><button>Cancel</button></a>
+      </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+  $(document).ready(function(){
+    var facilities = {{ownedUnitToUpdateFacilities|safe}};
+    if (facilities.includes("bed")===false){
+       $("#bedCaption").hide();
+    }
+    if (facilities.includes("comfort room")===false){
+       $("#comfortroomCaption").hide();
+    }
+    if (facilities.includes("air cooling system")===false){
+       $("#aircoolingsystemCaption").hide();
+    }
+    if (facilities.includes("study area")===false){
+       $("#studyareaCaption").hide();
+    }
+    if (facilities.includes("wifi zone")===false){
+       $("#wifizoneCaption").hide();
+    }
+    if (facilities.includes("shower")===false){
+       $("#showerCaption").hide();
+    }
+   
+
+   
+
+
+  });
+</script>
+<script src="{{url_for('static',filename='js/updateunit.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
