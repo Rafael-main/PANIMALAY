@@ -4,7 +4,6 @@ from datetime import datetime
 import base64
 import simplejson as json
 from flask import Flask,render_template, redirect, request,url_for,abort, session
-
 from app import app
 import app.accountModel as accounts
 import app.profileModel as profiles
@@ -22,6 +21,7 @@ def guestLandingPage():
 	return render_template("landingpage.html")
 
 
+	
 @app.route("/signup")
 def signup():
 	return render_template("signup.html",title="Signup to Panimalay")
@@ -160,6 +160,7 @@ def addProfilePicture(profileID):
 	blob = file.read()
 	newProfilePic = profilepic.profilePicture(filename,blob)
 	newProfilePic.addProfilePicture(profileID)
+
 	return redirect(url_for("updateProfilePage"))
 
 @app.route("/update/profile/picture/<string:profileID>",methods=["POST"])
@@ -184,8 +185,6 @@ def updateInfo(username,profileID):
 		profileToupdate.updatePhoneNumber(phoneNumber,profileID)
 		return redirect(url_for("profile"))
 
-
-
 @app.route("/insertAccountAndProfile",methods=['POST','GET'])
 def insertAccountAndProfile():
 	if request.method == "POST":
@@ -207,7 +206,6 @@ def insertAccountAndProfile():
 		newProfile = profiles.profile(username,firstName,lastName,birthDate,gender)
 		
 		errorMsg1 = ""
-
 		errorMsg2 = ""
 		if newAccount.usernameValidate(username)==True:
 			errorMsg1 = "Username already taken!"

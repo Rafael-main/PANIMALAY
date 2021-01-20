@@ -46,8 +46,6 @@ class profile():
 		cur.execute("SELECT * FROM profiles")
 		profiles = cur.fetchall()
 		return profiles
-  
-  
 
 	@classmethod
 	def searchPhoneNumber(cls,username):
