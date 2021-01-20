@@ -61,8 +61,9 @@
   
   .map, #mapid{
 	width: 600px; 
-	height: 600px; 
-	position: absolute;
+	height: 670px; 
+	position: absolute; 
+	border-radius: 32px;
   }
   
   a:visited {

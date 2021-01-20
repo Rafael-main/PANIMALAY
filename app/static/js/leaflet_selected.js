@@ -11,4 +11,5 @@ var mapboxTiles2 = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-
 
 var select_map = L.map('select_mapid')
      .addLayer(mapboxTiles2)
-     .setView([11.206051, 122.447886], 8);
+     .setView([8.2280,124.2452], 8);
+var marker = L.marker(coordinates).addTo(select_map);
