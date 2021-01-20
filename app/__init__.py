@@ -15,4 +15,3 @@ app.config['MYSQL_HOST'] = DB_HOST
 mysql = MySQL(app)
 
 from app import routes
-
