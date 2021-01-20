@@ -1,4 +1,4 @@
-from app import app,mysql
+from app import app, mysql
 import random, string
 
 class profile():
@@ -41,6 +41,13 @@ class profile():
 
 
 
+	def allProfiles(self):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM profiles")
+		profiles = cur.fetchall()
+		return profiles
+  
+  
 
 	@classmethod
 	def searchPhoneNumber(cls,username):
@@ -75,3 +82,16 @@ class profile():
 		for p in phoneNumbers:
 			listOfPhoneNumbers.append(p[1])
 		return listOfPhoneNumbers
+
+	def allPhoneNumberWithID(self):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM profilephonenumber")
+		phoneNumbers = cur.fetchall()
+		return phoneNumbers
+	@classmethod
+	def searchProfile(cls,usrnm):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM profiles WHERE username=%s",(usrnm,))
+		profile = cur.fetchall()
+		return profile
+

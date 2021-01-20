@@ -48,3 +48,10 @@ class profilePicture():
 		else:
 			return None
 
+	@classmethod
+	def searchAllProfilePictures(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("""SELECT profilepictures.profileID,images.imageID,images.filename,images.datum FROM profilepictures
+				INNER JOIN images ON profilepictures.imageID = images.imageID""")
+		profilePictures = cur.fetchall()
+		return profilePictures
