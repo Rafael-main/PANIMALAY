@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   CONSTRAINT `payments_ibfk_3` FOREIGN KEY (`unitRented`) REFERENCES `units` (`unitID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
+
 -- Data exporting was unselected.
 
 -- Dumping structure for table resources.profilephonenumber
@@ -109,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `profilephonenumber` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
-
 -- Dumping structure for table resources.profilepictures
 CREATE TABLE IF NOT EXISTS `profilepictures` (
   `profileID` varchar(255) NOT NULL,
@@ -182,7 +182,6 @@ CREATE TABLE IF NOT EXISTS `renters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
-
 -- Dumping structure for table resources.reservation
 CREATE TABLE IF NOT EXISTS `reservation` (
   `username` varchar(255) NOT NULL,
@@ -197,6 +196,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
+
 
 -- Dumping structure for table resources.services
 CREATE TABLE IF NOT EXISTS `services` (
@@ -228,6 +228,7 @@ CREATE TABLE IF NOT EXISTS `units` (
   `rate` varchar(255) NOT NULL,
   `unitType` varchar(255) NOT NULL,
   `genderAccommodation` enum('Female','Male','Unisex') NOT NULL,
+
   PRIMARY KEY (`unitID`),
   KEY `RBID` (`RBID`),
   CONSTRAINT `units_ibfk_1` FOREIGN KEY (`RBID`) REFERENCES `rentalbusiness` (`RBID`) ON DELETE CASCADE ON UPDATE CASCADE

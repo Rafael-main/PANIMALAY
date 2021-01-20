@@ -1,3 +1,4 @@
+
 *{
 margin: 0;
 padding: 0;
@@ -8,6 +9,7 @@ text-decoration: none;
 
 body{
 background-color: #fff;
+
 }
 
 .wrapper{
@@ -91,7 +93,6 @@ color: #717171;
 border-bottom: 1px solid #e0e4e8;
 }
 
-
 .wrapper .main_content .info{
 margin: 20px;
 color: #717171;
@@ -140,6 +141,7 @@ padding: 20px;
 .text {
 padding: 20px;
 }
+
 .maintable {
 padding: 100px;
 }
@@ -174,6 +176,7 @@ cursor: pointer;
 font-size: 15px;
 border-radius: 16px;
 }
+
 
 button:hover {
 background-color: gray;

@@ -89,3 +89,4 @@ class account():
 		cur = mysql.connection.cursor()
 		cur.execute("UPDATE accounts SET password=%s WHERE username=%s",(newPassword,username))
 		mysql.connection.commit()
+

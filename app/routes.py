@@ -1,7 +1,10 @@
+
+import os
 from datetime import datetime
 import base64
 import simplejson as json
 from flask import Flask,render_template, redirect, request,url_for,abort, session
+
 from app import app
 import app.accountModel as accounts
 import app.profileModel as profiles
@@ -18,6 +21,7 @@ import app.unitimagesmodel as unitimages
 def guestLandingPage():
 	return render_template("landingpage.html")
 
+
 @app.route("/signup")
 def signup():
 	return render_template("signup.html",title="Signup to Panimalay")
@@ -25,6 +29,7 @@ def signup():
 @app.route("/signin")
 def signin():
 	return render_template("signin.html",title="Signin to Panimalay")
+
 
 @app.route("/login",methods=['POST','GET'])
 def login():
@@ -202,7 +207,7 @@ def insertAccountAndProfile():
 		newProfile = profiles.profile(username,firstName,lastName,birthDate,gender)
 		
 		errorMsg1 = ""
-		
+
 		errorMsg2 = ""
 		if newAccount.usernameValidate(username)==True:
 			errorMsg1 = "Username already taken!"

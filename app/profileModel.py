@@ -40,12 +40,14 @@ class profile():
 		mysql.connection.commit()
 
 
+
 	def allProfiles(self):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM profiles")
 		profiles = cur.fetchall()
 		return profiles
-
+  
+  
 
 	@classmethod
 	def searchPhoneNumber(cls,username):
@@ -72,6 +74,7 @@ class profile():
 		cur.execute("UPDATE profilephonenumber SET phoneNumber=%s WHERE profileID=%s",(phoneNumber,profileID))
 		mysql.connection.commit()
 
+
 	def allPhoneNumbers(self):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM profilephonenumber")
@@ -92,3 +95,4 @@ class profile():
 		cur.execute("SELECT * FROM profiles WHERE username=%s",(usrnm,))
 		profile = cur.fetchall()
 		return profile
+
