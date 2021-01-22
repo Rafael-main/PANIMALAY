@@ -182,7 +182,7 @@
         </button>
       </div>
     <div class="modal-body">
-      <form>
+      <form action="{{url_for('redirectSearch')}}" method="POST">
       	<div class="col-12 mt-2">
       		<label for="location"><strong>Location</strong></label>
       		<input class="form-control" type="text" name="location" id="location" required="1" placeholder="Where do you want to stay?">
@@ -202,13 +202,13 @@
       			<option selected disabled>Select</option>
       			<option value="Male">Male</option>
 			    <option value="Female">Female</option>
-			    <option value="Mix Gender">Mix Gender</option>
+			    <option value="Unisex">Mix Gender</option>
 			</select>
       	</div>
       	<div class="col-12 mt-2" style="margin-left: 50px;">
 	         <ul>
 	            <li>
-	               <button id="plusCapacity" onclick="increment()" style="border: none;background-color: white;"><i class="fas fa-plus-circle fa-2x"></i></button>
+	               <button id="plusCapacity" type="button" onclick="increment()" style="border: none;background-color: white;"><i class="fas fa-plus-circle fa-2x"></i></button>
 	            </li>
 	            <li>
 	               <div class="col-12 mt-2">
@@ -217,7 +217,7 @@
 	               </div>
 	            </li>
 	            <li>
-	               <button id="plusCapacity" onclick="decrement()" style="border: none;background-color: white;"><i id="minusCapacity" class="fas fa-minus-circle fa-2x"></i></button>
+	               <button id="minusCapacity"  type="button"  onclick="decrement()" style="border: none;background-color: white;"><i i class="fas fa-minus-circle fa-2x"></i></button>
 	            </li>
 	         </ul>
       	</div>
@@ -230,11 +230,11 @@
   		<br>
       	<div class="col-12 mt-2">
 	      	<div class="range-value" id="rangeV"></div>
-	      	<input id="range" type="range" min="0" max="10000" value="200" step="1">
+	      	<input id="range" name="budget" type="range" min="0" max="10000" value="0" step="1">
       	</div>
       <hr>
       <div>
-        <button type="button" class="btn btn-primary float-left" style="margin-left: 50px;border-radius: 50px">Search</button>
+        <button type="submit" class="btn btn-primary float-left" style="margin-left: 50px;border-radius: 50px">Search</button>
         <button type="button" class="btn btn-secondary float-right" data-dismiss="modal" style="margin-right: 50px;border-radius: 50px">Close</button>
       </div>
       </form>
@@ -287,7 +287,7 @@
 	    		<p class="card-text">{{business.3}}</p>
 	    		{% endif %}
 	    		{% endfor %}
-
+	    		
 
 	    		<a href="http://127.0.0.1:5000/selected/unit/{{unit.1}}/{{unit.0}}" class="btn btn-primary" style="border-radius: 50px" target="_blank"><i class="fas fa-eye">View Info</i></a>
 
@@ -320,7 +320,7 @@
        	<h6 style="color: gray">Unit Rate:P{{unit.3}}/month</h6>
        	 </div>
        	
-        <button type="submit" class="btn btn-primary float-left" style="margin-left: 50px;border-radius: 50px">Yes,Proceed</button>
+        <button type="submit" class="btn btn-primary float-left" style="margin-left: 50px;border-radius: 50px">Reserve</button>
         <button type="button" class="btn btn-secondary float-right" data-dismiss="modal" style="margin-right: 50px;border-radius: 50px">Cancel</button>
       </form>
     </div>
@@ -341,13 +341,24 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script>
-		var map = L.map('mapContainer').setView([10.566233,120.262634],5);
 
-		L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=7QKxCSBFDl34PzEnibtg', {
-			attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-		}).addTo(map);
+	var locations = {{allUnitsJSON|safe}};
+	var map = L.map('mapContainer').setView([10.566233,120.262634],5);
+	mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+	L.tileLayer(
+    	'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+   		 attribution: '&copy; ' + mapLink + ' Contributors',
+    	maxZoom: 18,
+    	}).addTo(map);
 
-		function mark(clicked_id){
+	for (var i = 0; i < locations.length; i++) {
+		marker = new L.marker([locations[i][7],locations[i][8]])
+		.bindPopup(locations[i][13])
+		.addTo(map);
+	}
+  
+
+    function mark(clicked_id){
 	      var id = clicked_id;
 	      var locations = {{unitLocationsJSON|safe}};
 	      for (let i=0;i<locations.length;i++){
@@ -355,12 +366,11 @@
 	      	if (location[0]===id){
 	      		var latitude = location[2];
 	      		var longitude = location[3];
-	      		var marker = L.marker([parseFloat(latitude),parseFloat(longitude)]).addTo(map);
+	      		map.flyTo([parseFloat(latitude),parseFloat(longitude)], 8);
 	      	}
 
 	      }
 	  }
-		
 </script>
 <script>
 	function increment() {

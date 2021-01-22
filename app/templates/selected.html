@@ -170,7 +170,18 @@
                   {% for profile in selected_data["profiles"] %}
                   {% if profile.0 == feedback.0 %}
                   <span><i class="fas fa-edit" style="margin-left:85%;margin-right: 30px;" data-toggle="modal" data-target="#updateModal"></i><i class="fas fa-trash" data-toggle="modal" data-target="#deleteFeedbackModal"></i></span>
-                  <h5>{{profile.2}} {{profile.3}}</h5>
+                  
+                    {% if checkProfilePicture(profile.1)==true%}
+                    {% for p in profilePictures %}
+                    {% if p.0 == profile.1 %}
+                     <h5><img src="data:;base64,{{p.3}}" style="max-height:5%;max-width:5%;border-radius:50px;border:1px solid black;" alt="{{p.2}}">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                     <h5><img src="{{url_for('static',filename='images/signinperson.png')}}" style="max-height:5%;max-width:5%;border-radius:50px;">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+                 
+                 
                   {% endif %}
                   {% endfor %}
                   <ul>
@@ -258,7 +269,17 @@
                 <div class="card" style="padding: 5%;margin: 5%">
                   {% for profile in selected_data["profiles"] %}
                   {% if profile.0 == feedback.0 %}
-                  <h5>{{profile.2}} {{profile.3}}</h5>
+                  
+                    {% if checkProfilePicture(profile.1)==true%}
+                    {% for p in profilePictures %}
+                    {% if p.0 == profile.1 %}
+                     <h5><img src="data:;base64,{{p.3}}" style="max-height:5%;max-width:5%;border-radius:50px;border:1px solid black;" alt="{{p.2}}">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                     <h5><img src="{{url_for('static',filename='images/signinperson.png')}}" style="max-height:5%;max-width:5%;border-radius:50px;">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+
                   {% endif %}
                   {% endfor %}
                   <ul>
@@ -327,7 +348,16 @@
                 <div class="card" style="padding: 5%;margin: 5%">
                   {% for profile in selected_data["profiles"] %}
                   {% if profile.0 == feedback.0 %}
-                  <h5>{{profile.2}} {{profile.3}}</h5>
+                   
+                    {% if checkProfilePicture(profile.1)==true%}
+                    {% for p in profilePictures %}
+                    {% if p.0 == profile.1 %}
+                     <h5><img src="data:;base64,{{p.3}}" style="max-height:5%;max-width:5%;border-radius:50px;border:1px solid black;" alt="{{p.2}}">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                     <h5><img src="{{url_for('static',filename='images/signinperson.png')}}" style="max-height:5%;max-width:5%;border-radius:50px;">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
                   {% endif %}
                   {% endfor %}
                   <ul>
@@ -402,7 +432,15 @@
                 <div class="card" style="padding: 5%;margin: 5%">
                   {% for profile in selected_data["profiles"] %}
                   {% if profile.0 == feedback.0 %}
-                  <h5>{{profile.2}} {{profile.3}}</h5>
+                    {% if checkProfilePicture(profile.1)==true%}
+                    {% for p in profilePictures %}
+                    {% if p.0 == profile.1 %}
+                     <h5><img src="data:;base64,{{p.3}}" style="max-height:5%;max-width:5%;border-radius:50px;border:1px solid black;" alt="{{p.2}}">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                     <h5><img src="{{url_for('static',filename='images/signinperson.png')}}" style="max-height:5%;max-width:5%;border-radius:50px;">  {{profile.2}} {{profile.3}}</h5>
+                    {% endif %}
                   {% endif %}
                   {% endfor %}
                   <ul>
@@ -613,7 +651,24 @@ var coordinates = [lat,lng];
     
     });
 </script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet_selected.js') }}"></script>
+<script>
+var loc = {{selected_data['locationsForCoordinates']|safe}};
+L.mapbox.accessToken = 'pk.eyJ1IjoicmFmdW5nIiwiYSI6ImNramdrbjBsdDN3c2Iyem5xMGJ1cTBzemIifQ.550TU0Z5yySD8mteqHIOKQ';
+
+
+var mapboxTiles2 = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=' + L.mapbox.accessToken, {
+       attribution: '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+       tileSize: 512,
+       zoomOffset: -1,
+       maxZoom: 18,
+       tileSize: 512
+});
+
+var select_map = L.map('select_mapid')
+     .addLayer(mapboxTiles2)
+     .setView([loc['latitude'],loc['longitude']], 8);
+var marker = L.marker([loc['latitude'],loc['longitude']]).addTo(select_map);
+</script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/selected.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

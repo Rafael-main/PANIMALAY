@@ -1,9 +1,7 @@
-
-import os
+import simplejson as json
 from datetime import datetime
 import base64
-import simplejson as json
-from flask import Flask,render_template, redirect, request,url_for,abort, session
+from flask import Flask,flash,render_template, redirect, request,url_for,session
 from app import app
 import app.accountModel as accounts
 import app.profileModel as profiles
@@ -22,17 +20,24 @@ import app.selectedModel as searches
 
 @app.route("/signup")
 def signup():
-	return render_template("signup.html",title="Signup to Panimalay")
+	if "username" in session and "accountType" in session:
+		return redirect(url_for("profile"))
+	else:
+		return render_template("signup.html",title="Signup to Panimalay")
 
 @app.route("/signin")
 def signin():
-	return render_template("signin.html",title="Signin to Panimalay")
+	if "username" in session and "accountType" in session:
+		return redirect(url_for("profile"))
+	else:
+		return render_template("signin.html",title="Signin to Panimalay")
 
 @app.route("/")
 def landingPage():
 	if "username" in session:
 		username = session["username"]
-		return render_template("landingpage.html",username=username)
+		accountType = session["accountType"]
+		return render_template("landingpage.html",username=username,accountType=accountType)
 	else:
 		return render_template("landingpage.html")
 
@@ -46,6 +51,7 @@ def login():
 			accountType = loginAccount.accountData(username)
 			session["username"] = username
 			session["accountType"] = accountType[3]
+			print(accountType[3])
 			acc = accounts.account()
 			data = acc.profileData(username)
 			if data[0][3]=="owner": 
@@ -162,7 +168,6 @@ def addProfilePicture(profileID):
 	blob = file.read()
 	newProfilePic = profilepic.profilePicture(filename,blob)
 	newProfilePic.addProfilePicture(profileID)
-
 	return redirect(url_for("updateProfilePage"))
 
 @app.route("/update/profile/picture/<string:profileID>",methods=["POST"])
@@ -187,6 +192,8 @@ def updateInfo(username,profileID):
 		profileToupdate.updatePhoneNumber(phoneNumber,profileID)
 		return redirect(url_for("profile"))
 
+
+
 @app.route("/insertAccountAndProfile",methods=['POST','GET'])
 def insertAccountAndProfile():
 	if request.method == "POST":
@@ -208,6 +215,7 @@ def insertAccountAndProfile():
 		newProfile = profiles.profile(username,firstName,lastName,birthDate,gender)
 		
 		errorMsg1 = ""
+		
 		errorMsg2 = ""
 		if newAccount.usernameValidate(username)==True:
 			errorMsg1 = "Username already taken!"
@@ -239,15 +247,49 @@ def home():
 		prof= profiles.profile()
 		data = acc.profileData(username)
 		phoneNumber = prof.searchPhoneNumber(str(username))
-		file =  profilepic.profilePicture()
-		datum = file.retrieveFile(data[1][1])
-		if datum!=None:
-			datum = base64.b64encode(datum[2])
-			datum = datum.decode("UTF-8")
+		rentalBusinessInfo = renbus.rentalBusiness()
+		rentalBusinessInfo = rentalBusinessInfo.searchRentalBusiness(username)
+		if rentalBusinessInfo != None:
+			RBID = rentalBusinessInfo[2]
+			ownedUnits = unit.newUnit()
+			allRenters = ownedUnits.renters()
+			ownedUnits = ownedUnits.searchUnit(RBID)
+
+			sumOfRate = 0
+			noOfRenter = 0
+			for ownedunit in ownedUnits:
+				sumOfRate+=int(ownedunit[3])
+
+			for ownedunit in ownedUnits:
+				for renter in allRenters:
+					if ownedunit[1] == renter[1]:
+						noOfRenter+=1
+
+			allFeedbacks = feedback.newFeedback()
+			allFeedbacks = allFeedbacks.reviewedUnitsFeedback()
+
+			sumOfStars = 0
+			noOfFeedbacks = 0 
+			for ownedunit in ownedUnits:
+				for f in allFeedbacks:
+					if f[1]==ownedunit[1]:
+						noOfFeedbacks+=1
+						sumOfStars+=f[4]
+
+
+
+			averageRate = int(sumOfRate/len(ownedUnits))
+			if noOfFeedbacks!=0:
+				averageStarRating = sumOfStars/noOfFeedbacks
+			else:
+				averageStarRating =0
+			noOfUnits = len(ownedUnits)
+			RBdata = [noOfUnits,noOfRenter,averageStarRating,averageRate]
+			
+			return render_template("home.html",RBdata=RBdata)
 		else:
-			datum = datum
-		
-		return render_template("home.html",username=username,data=data,phoneNumber=phoneNumber,datum=datum)
+			RBdata = [0,0,0,0]
+			return render_template("home.html",RBdata=RBdata)
 	else:
 		return redirect(url_for("signin"))
 	
@@ -577,7 +619,47 @@ def searchResult():
 	else:
 		if "username" in session and "accountType" in session:
 			username = session["username"]
+		else:
+			username ="unknown"
 		return render_template("searchResult.html",username=username)
+
+@app.route("/search/redirect",methods=["POST"])
+def redirectSearch():
+	if request.method=="POST":
+		location = request.form["location"]
+		unitType = request.form["unitType"]
+		genderAccommodation = request.form["genderAccommodation"]
+		capacity = request.form["capacityModalInput"]
+		budget = request.form["budget"]
+		searchUnit = unit.newUnit()
+		allUnits = searchUnit.searchResultWithBudget(location,unitType,genderAccommodation,capacity,budget)
+		rentalBusinesses = searchUnit.searchAllRentalBusiness()
+		unitLocations = searchUnit.searchAllUnitLocation()
+		unitImages = searchUnit.searchAllUnitImages()
+		imagesBlob = []
+		imageChecker = len(unitImages)
+		if imageChecker!=0:
+			for image in unitImages:
+				blob  = base64.b64encode(image[3])
+				blob = blob.decode("UTF-8")
+				imagesBlob.append([image[0],image[1],image[2],blob])
+		if "username" in session and "accountType" in session:
+			username = session["username"]
+			accountType = session["accountType"]
+			currentDate = datetime.today().strftime('%Y-%m-%d')
+			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+		else:
+			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
+	else:
+		if "username" in session and "accountType" in session:
+			username = session["username"]
+		else:
+			username ="unknown"
+		return render_template("searchResult.html",username=username)
+
+
+
+
 
 @app.route("/feedback/<string:unitID>")
 def feedbackForm(unitID):
@@ -649,8 +731,14 @@ def renters():
 					blob  = base64.b64encode(picture[3])
 					blob = blob.decode("UTF-8")
 					profilePicturesWithBlob.append([picture[0],picture[1],picture[2],blob])
-
-			return render_template("renters.html",RBID=RBID,rentersInfo=rentersInfo,profilePictures=profilePicturesWithBlob)
+			#checking if a profile picture of an profile is available
+			def checkProfilePicture(profileID):
+				flag = False
+				for p in profilePictures:
+					if p[0]==profileID:
+						flag = True
+				return flag
+			return render_template("renters.html",RBID=RBID,rentersInfo=rentersInfo,profilePictures=profilePicturesWithBlob,checkProfilePicture=checkProfilePicture)
 		else:
 			return redirect(url_for("manageBusiness"))
 	else:
@@ -784,6 +872,32 @@ def rentedUnit():
 	else:
 		return redirect(url_for("landingPage"))
 
+@app.route("/leave/<string:username>/<string:unitID>")
+def renterRequestToLeave(username,unitID):
+	requestToLeave = unit.newUnit()
+	requestToLeave.renterRequestToLeave(username,unitID)
+	return redirect(url_for("rentedUnit"))
+
+@app.route("/cancel/leave/<string:username>/<string:unitID>")
+def cancelLeave(username,unitID):
+	if "username" in session:
+		accountType = session["accountType"]
+		if accountType == "renter":
+			cancelRequestToLeave = unit.newUnit()
+			cancelRequestToLeave.cancelRenterRequestToLeave(username,unitID)
+			return redirect(url_for("rentedUnit"))
+		else:
+			cancelRequestToLeave = unit.newUnit()
+			cancelRequestToLeave.cancelRenterRequestToLeave(username,unitID)
+			return redirect(url_for("renters"))
+
+@app.route("/confirm/request/to/leave/<string:username>/<string:unitID>")
+def confirmRequestToLeave(username,unitID):
+	confirmLeave = unit.newUnit()
+	confirmLeave = confirmLeave.checkoutRenter(username,unitID)
+	return redirect(url_for("renters"))
+
+
 @app.route("/reviewed/units")
 def reviewUnits():
 	if "username" in session:
@@ -800,8 +914,8 @@ def reviewUnits():
 		return render_template("reviewedunits.html",username=username,accountType=accountType,rentals=rentals,units=allUnits,feedbacks=feedbacks)
 	else:
 		return redirect(url_for("landingPage"))
-@app.route("/signout")
 
+@app.route("/signout")
 def logout():
 	if "username" in session:
 		session.pop("username",None)
@@ -847,7 +961,7 @@ def selected_unit(RBID,unitID):
 		starRatingAverage = sumOfAllStar/len(searchResultFeedback)
 	else:
 		starRatingAverage = sumOfAllStar
-	#current data
+	#current date
 	currentDate = datetime.today().strftime('%Y-%m-%d')
 
 	currentUserFeedbackChecker = 0
@@ -855,9 +969,18 @@ def selected_unit(RBID,unitID):
 		for i in searchResultFeedback:
 			if i[0]==username:
 				currentUserFeedbackChecker = 1
+	profilePictures = profilepic.profilePicture()
+	profilePictures =profilePictures.searchAllProfilePictures()
+	profilePicturesWithBlob = []
+	imageChecker = len(profilePictures)
+	if imageChecker!=0:
+		for picture in profilePictures:
+			blob  = base64.b64encode(picture[3])
+			blob = blob.decode("UTF-8")
+			profilePicturesWithBlob.append([picture[0],picture[1],picture[2],blob])
 
-
-	searchResultUnits['locations'] = searchResultLocations
+	searchResultUnits['locationsForCoordinates'] = json.dumps(searchResultLocations)
+	searchResultUnits['locations'] = searchResultLocations	
 	searchResultUnits['protocols'] = searchResultProtocols
 	searchResultUnits['services'] = searchResultServices
 	searchResultUnits['facilities'] = searchResultFacilities
@@ -870,5 +993,13 @@ def selected_unit(RBID,unitID):
 	searchResultUnits['starRatingAverage'] = starRatingAverage
 	searchResultUnits['currentDate'] = currentDate
 	searchResultUnits['searchResultAvailability'] = searchResultAvailability 
-
-	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username)
+	
+	#checking if a profile picture of an profile is available
+	def checkProfilePicture(profileID):
+		flag = False
+		for p in profilePictures:
+			if p[0]==profileID:
+				flag = True
+		return flag
+				
+	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username,checkProfilePicture=checkProfilePicture,profilePictures=profilePicturesWithBlob)

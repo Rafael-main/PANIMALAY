@@ -48,7 +48,46 @@
             <h5><strong>Contact no:</strong>{{phoneNumber.1}}</h5>
             {% endif %}
             {% endfor %}
+            {% if renter.4 == "C1" %}
+            <button data-toggle="modal" data-target="#checkoutConfirmation{{username}}">Request to Leave</button>
             </div>
+            <div class="modal fade" id="checkoutConfirmation{{username}}">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to checkout?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="http://127.0.0.1:5000/leave/{{username}}/{{renter.1}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% elif renter.4 == "L" %}
+            <h5>Requesting to leave....</h5>
+            <button data-toggle="modal" data-target="#cancelRequestToLeave{{username}}">Cancel</button>
+            </div>
+            <div class="modal fade" id="cancelRequestToLeave{{username}}">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want cancel your request to leave?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="http://127.0.0.1:5000/cancel/leave/{{username}}/{{renter.1}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
             {% endif %}
             {% endfor %}
             {% endfor %}
