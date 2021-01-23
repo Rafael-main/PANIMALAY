@@ -1,0 +1,50 @@
+.form-control{
+border: none;
+}
+#featuredUnits{
+margin-top: 50px;
+margin-left: 100px;
+margin-top: 100px;
+width: 1200px;
+height: 500px;
+}
+#featuredUnitsContainer{
+border-radius: 50px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
+}
+ul li{
+display: inline-block;
+margin-right: 20px;
+margin-top: 20px;
+}
+input[type="number"] {
+-webkit-appearance: textfield;
+  -moz-appearance: textfield;
+       appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+-webkit-appearance: none;
+}
+#capacityModalInput{
+font-size: 30px;
+}
+#searchButton{
+border: none;
+background-color: white;
+padding-top: 10px;
+margin-bottom: 10px;
+}
+
+#neon {
+color: #fff;
+text-shadow:
+0 0 5px #fff,
+0 0 10px #fff,
+0 0 20px #fff,
+0 0 40px #0ff,
+0 0 80px #0ff,
+0 0 90px #0ff,
+0 0 100px #0ff,
+0 0 150px #0ff;
+}

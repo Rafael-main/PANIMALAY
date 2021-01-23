@@ -145,14 +145,14 @@
 				</div>
 			</span>
         </li>
-        {% if username is not defined %}
+        {% if username is not defined or username=="unknown"%}
         <li class="nav-item" style="margin-left: 200px;">
         	<a href="http://127.0.0.1:5000/signup" style="color: black;font-size:18;font-family: monserrat"><strong>SIGNUP</strong></a>
         </li>
         <li style="margin-left: 20px;" class="nav-item">
         	<a href="http://127.0.0.1:5000/signin" style="color: black;font-size:18;font-family: monserrat"><strong>LOGIN</strong></a>
          </li>
-        {% else %}
+        {% elif username is defined and username!="unknown" %}
         <li class="nav-item dropdown" style="margin-left: 200px;">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black">
              {{username}}

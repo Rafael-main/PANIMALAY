@@ -211,3 +211,57 @@ class newUnit():
 		cur.execute("UPDATE renters SET status=%s WHERE username=%s  and unitID=%s",(status,username,unitID))
 		mysql.connection.commit()
 
+	@classmethod
+	def searchResultForUnitType(cls,unittype):
+		cur = mysql.connection.cursor()
+		cur.execute("SET @unittypeInput=%s",(unittype,))
+		cur.execute("""SELECT * FROM (SELECT units.unitID,units.RBID,units.capacity,units.rate,units.unitType,units.genderAccommodation,locations.locationID,locations.latitude,locations.longitude,locations.street,locations.barangay,locations.cityOrMunicipality,locations.province,rentalbusiness.rbName
+		FROM units
+		INNER JOIN locations ON units.unitID=locations.unitID
+		INNER JOIN rentalbusiness ON rentalbusiness.RBID = units.RBID) AS unitsInfo
+		WHERE unitType=@unittypeInput""")
+		data = cur.fetchall()
+		return data	
+
+	@classmethod
+	def averageRateForUnitType(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM units")
+		allUnits = cur.fetchall()
+
+		sumRateForBoardingHouses = 0
+		sumRateForAppartments = 0
+		sumRateForDorms =  0 
+
+		numberOfBoardingHouses = 0 
+		numberOfAppartments = 0 
+		numberOfDorms = 0 
+
+		for unit in allUnits:
+			if unit[4] == "Boarding House":
+				sumRateForBoardingHouses+= int(unit[3])
+				numberOfBoardingHouses+=1
+			elif unit[4] =="Appartment":
+				sumRateForAppartments+= int(unit[3])
+				numberOfAppartments+=1
+			else:
+				sumRateForDorms+=int(unit[3])
+				numberOfDorms+=1
+
+		if numberOfBoardingHouses!=0: 
+			aveRateForBoardingHouses =  sumRateForBoardingHouses/numberOfBoardingHouses
+		else:
+			aveRateForBoardingHouses = 0
+		if numberOfAppartments!=0:
+			aveRateForAppartments = sumRateForAppartments/numberOfAppartments
+		else:
+			aveRateForAppartments = 0
+		if numberOfDorms!=0:
+			aveRateForDorms = sumRateForDorms/numberOfDorms
+		else:
+			aveRateForDorms
+		averages = [int(aveRateForBoardingHouses),int(aveRateForAppartments),int(aveRateForDorms)]
+		return averages
+
+		
+

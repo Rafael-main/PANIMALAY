@@ -5,64 +5,26 @@
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
   <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
-  <style>
-    .form-control{
-      border: none;
-    }
-    #featuredUnits{
-      margin-top: 50px;
-      margin-left: 100px;
-      margin-top: 100px;
-      width: 1200px;
-      height: 500px;
-    }
-    #featuredUnitsContainer{
-      border-radius: 50px;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
-    }
-    ul li{
-      display: inline-block;
-      margin-right: 20px;
-      margin-top: 20px;
-    }
-    input[type="number"] {
-     -webkit-appearance: textfield;
-        -moz-appearance: textfield;
-             appearance: textfield;
-    }
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none;
-    }
-    #capacityModalInput{
-      font-size: 30px;
-    }
-    #searchButton{
-      border: none;
-      background-color: white;
-      padding-top: 10px;
-      margin-bottom: 10px;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/landingpage_style.css')}}">
 </head>
 <body>
-<div>
+<div style="background-color:#2C3E50;">
   <header>
-     <nav class="navbar" style="height: 50px;">
+     <nav class="navbar" style="height: 5%;">
           <ul>
-          <li class="nav-item" style="margin-right: 600px;position: static;">
-          <a href="/" style="color: black;font-size:20; font-family: 'baybayin rounded';"><strong><h2>P A N I M A L A Y</h2></strong></a>
+          <li id="neon" class="nav-item" style="margin-right: 700px;position: static;">
+          <a href="/" style="color: white;font-size:20; font-family: 'baybayin rounded';"><strong><h2>P A N I M A L A Y</h2></strong></a>
           </li>
           {% if username is not defined %}
           <li class="nav-item">
-            <a href="http://127.0.0.1:5000/signup" style="color: black;font-size:18;font-family: monserrat"><strong>SIGNUP</strong></a>
+            <a href="http://127.0.0.1:5000/signup" style="color: white;font-size:18;font-family: monserrat"><strong>SIGNUP</strong></a>
           </li>
           <li style="margin-left: 20px;" class="nav-item">
-            <a href="http://127.0.0.1:5000/signin" style="color: black;font-size:18;font-family: monserrat"><strong>LOGIN</strong></a>
+            <a href="http://127.0.0.1:5000/signin" style="color: white;font-size:18;font-family: monserrat"><strong>LOGIN</strong></a>
           </li>
           {% elif username is defined %}
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
              {{username}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -85,7 +47,7 @@
             </div>
            </li>
           <li class="nav-item" style="margin-left: 20px;position: static;">
-            <a href="{{url_for('logout')}}" style="color: black;font-size:18;font-family: monserrat"><strong>LOGOUT</strong></a>
+            <a href="{{url_for('logout')}}" style="color: white;font-size:18;font-family: monserrat"><strong>LOGOUT</strong></a>
           </li>
           {% endif %}
      </nav> 
@@ -93,7 +55,7 @@
 
 <br>
 <div id="featuredUnits">
-  <div class="container" id="featuredUnitsContainer">
+  <div class="container" id="featuredUnitsContainer" style="background-color: white;">
   <form action="http://127.0.0.1:5000/search/result" method="POST">
    <ul>
      <li> 
@@ -163,8 +125,51 @@
      </div>
   </div>
 </div>
-
+<div>
+<div style="padding-top: 10%;margin-right:250px;margin-left:250px;margin-top:-300px;background:none;">
+  <div class="container">
+    <div class="row" style="margin-left: 2.5%;margin-right: 2.5%;margin-top: -8%">
+      <div class="column" style="margin-left: 1%;margin-right:1%">
+        <a href="http://127.0.0.1:5000/search/result/boardinghouse" style="color: black">
+        <div class="card" style="width: 15rem;">
+          <img class="card-img-top" src="{{url_for('static', filename='images/signupbg.jpg')}}" alt="Card image cap">
+          <div class="card-body">
+          <p class="card-text"><strong>Boarding Houses</strong></p>
+          <small>Avg Rate/Month: P{{aveRates.0}}</small>
+        </div>
+        </div>
+        </a>
+      </div>
+      <div class="column" style="margin-left: 1%;margin-right:1%">
+      <a href="http://127.0.0.1:5000/search/result/appartment" style="color: black">
+      <div class="card" style="width: 15rem;">
+        <img class="card-img-top" src="{{url_for('static', filename='images/signupbg.jpg')}}" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text"><strong>Appartments</strong></p>
+          <small>Avg Rate/Month: P{{aveRates.1}}</small>
+        </div>
+      </div>
+      </a>
+      </div>
+      <div class="column" style="margin-left: 1%;margin-right:1%" >
+      <a href="http://127.0.0.1:5000/search/result/dorm"  style="color: black">
+      <div class="card" style="width: 15rem;">
+        <img class="card-img-top" src="{{url_for('static', filename='images/signupbg.jpg')}}" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text"><strong>Dorms</strong></p>
+          <small>Avg Rate/Month: P{{aveRates.2}}</small>
+        </div>
+      </div>
+      </a>
+      </div>
+  </div>
+  </div>
 </div>
+</div>
+<br>
+<br>
+</div>
+
 
 <footer>
   <div style="background-color: #E8E8FF; height: 350px; font-family: monserrat">

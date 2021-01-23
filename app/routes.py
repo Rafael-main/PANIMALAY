@@ -37,9 +37,13 @@ def landingPage():
 	if "username" in session:
 		username = session["username"]
 		accountType = session["accountType"]
-		return render_template("landingpage.html",username=username,accountType=accountType)
+		aveRates = unit.newUnit()
+		aveRates = aveRates.averageRateForUnitType()
+		return render_template("landingpage.html",username=username,accountType=accountType,aveRates=aveRates)
 	else:
-		return render_template("landingpage.html")
+		aveRates = unit.newUnit()
+		aveRates = aveRates.averageRateForUnitType()
+		return render_template("landingpage.html",aveRates=aveRates)
 
 @app.route("/login",methods=['POST'])
 def login():
@@ -1003,3 +1007,36 @@ def selected_unit(RBID,unitID):
 		return flag
 				
 	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username,checkProfilePicture=checkProfilePicture,profilePictures=profilePicturesWithBlob)
+
+
+@app.route("/search/result/<string:unitType>")
+def landingPageSearchResultForUnitType(unitType):
+	searchUnit = unit.newUnit()
+	unitTypeArg = ""
+	if unitType=="boardinghouse":
+		unitTypeArg = "Boarding House"
+	elif unitType=="appartment":
+		unitTypeArg = "Appartment"
+	else:
+		unitTypeArg = "Dorm"
+	allUnits = searchUnit.searchResultForUnitType(unitTypeArg)
+	rentalBusinesses = searchUnit.searchAllRentalBusiness()
+	unitLocations = searchUnit.searchAllUnitLocation()
+
+	unitImages = searchUnit.searchAllUnitImages()
+	imagesBlob = []
+	imageChecker = len(unitImages)
+	if imageChecker!=0:
+		for image in unitImages:
+			blob  = base64.b64encode(image[3])
+			blob = blob.decode("UTF-8")
+			imagesBlob.append([image[0],image[1],image[2],blob])
+	accountType = ""
+	if "username" in session and "accountType" in session:
+		username = session["username"]
+		accountType = session["accountType"]
+	else:
+		username= "unknown"
+	currentDate = datetime.today().strftime('%Y-%m-%d')
+	return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+	
