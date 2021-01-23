@@ -259,6 +259,7 @@
 				  {% set appendImage =  unitImages.append(image) %}
 				  {% endif %}
 				  {% endfor %}
+				  {% if (unitImages|length)!=0 %}
 				<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 				  <ol class="carousel-indicators">
 				  	 {% for i in unitImages %}
@@ -281,6 +282,9 @@
 				    <span class="sr-only">Next</span>
 				  </a>
 				</div>
+				{% else %}
+				<img class="d-block w-100" src="{{url_for('static',filename='images/noimageavailable.jpg')}}" style="max-height:100%px;border-radius:20px;">
+				{% endif %}
 				{% for business in rentalBusinesses %}
 				{% if business.2 == unit.1 %}
 	    		<h5 class="card-title">{{business.1}}</h5>
