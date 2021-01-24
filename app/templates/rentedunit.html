@@ -6,7 +6,7 @@
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/payment_style.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/rentedunit_style.css')}}">
 </head>
 <body>
 
@@ -18,6 +18,7 @@
             <li><a href="http://127.0.0.1:5000/renter/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
             <li><a href="http://127.0.0.1:5000/reviewed/units"><i class="fas fa-star"></i>Reviewed Units</a></li>
             <li><a href="http://127.0.0.1:5000/rented/unit"><i class="fas fa-building"></i><strong>Rented Unit</strong></a></li>
+            <li><a href="http://127.0.0.1:5000/payment/receipt"><i class="fas fa-receipt"></i>Payment Receipts</a></li>
             <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
@@ -49,40 +50,40 @@
             {% endif %}
             {% endfor %}
             {% if renter.4 == "C1" %}
-            <button data-toggle="modal" data-target="#checkoutConfirmation{{username}}">Request to Leave</button>
+            <button data-toggle="modal" data-target="#checkoutConfirmation{{username}}" style="border-radius: 20px">Request to Leave</button>
             </div>
             <div class="modal fade" id="checkoutConfirmation{{username}}">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to checkout?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border-radius: 20px">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a href="http://127.0.0.1:5000/leave/{{username}}/{{renter.1}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-radius: 20px">Close</button>
+                    <a href="http://127.0.0.1:5000/leave/{{username}}/{{renter.1}}" style="border-radius: 20px"><button type="button" class="btn btn-primary" style="border-radius: 20px">Yes,proceed</button></a>
                   </div>
                 </div>
               </div>
             </div>
             {% elif renter.4 == "L" %}
             <h5>Requesting to leave....</h5>
-            <button data-toggle="modal" data-target="#cancelRequestToLeave{{username}}">Cancel</button>
+            <button data-toggle="modal" data-target="#cancelRequestToLeave{{username}}" style="border-radius: 20px">Cancel</button>
             </div>
             <div class="modal fade" id="cancelRequestToLeave{{username}}">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want cancel your request to leave?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border-radius: 20px">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a href="http://127.0.0.1:5000/cancel/leave/{{username}}/{{renter.1}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-radius: 20px">Close</button>
+                    <a href="http://127.0.0.1:5000/cancel/leave/{{username}}/{{renter.1}}"><button type="button" class="btn btn-primary" style="border-radius: 20px">Yes,proceed</button></a>
                   </div>
                 </div>
               </div>

@@ -15,6 +15,7 @@
   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
   crossorigin=""></script>
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/updateunit_style.css')}}">
+  <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
 </head>
 <body>
 
@@ -57,17 +58,17 @@
               {% if ownedUnitToUpdate.4 == "Dorm" %}
               <option disabled ></option>
               <option value="Dorm" selected>Dorm</option>
-              <option value="Appartment">Appartment</option>
+              <option value="Apartment">Apartment</option>
               <option value="Boarding House">Boarding House</option>
-              {% elif  ownedUnitToUpdate.4 == "Appertment" %}
+              {% elif  ownedUnitToUpdate.4 == "Apartment" %}
               <option disabled ></option>
               <option value="Dorm">Dorm</option>
-              <option value="Appartment" selected>Appartment</option>
+              <option value="Apartment" selected>Apartment</option>
               <option value="Boarding House">Boarding House</option>
               {% else %}
               <option disabled ></option>
               <option value="Dorm">Dorm</option>
-              <option value="Appartment">Appartment</option>
+              <option value="Apartment">Apartment</option>
               <option value="Boarding House" selected>Boarding House</option>
               {% endif %}
             </select>

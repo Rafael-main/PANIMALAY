@@ -30,3 +30,23 @@ class newPayment():
 		cur = mysql.connection.cursor()
 		cur.execute("DELETE FROM payments WHERE paymentNo=%s",(paymentNumber,))
 		mysql.connection.commit()
+
+	@classmethod
+	def searchPaymentsForRenter(cls,username):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM payments WHERE username=%s",(username,))
+		paymentRecord = cur.fetchall()
+		if paymentRecord!=None:
+			return paymentRecord
+		else:
+			return None
+
+	@classmethod
+	def searchUnitForPayment(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("""SELECT * FROM (SELECT units.unitID,units.RBID,units.capacity,units.rate,units.unitType,units.genderAccommodation,rentalbusiness.rbName
+					FROM units
+					INNER JOIN rentalbusiness ON rentalbusiness.RBID = units.RBID) AS unitInfo""")
+		data = cur.fetchall()
+		
+		return data

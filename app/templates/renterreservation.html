@@ -6,7 +6,7 @@
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/payment_style.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/renterreservation_style.css')}}">
 </head>
 <body>
 
@@ -18,6 +18,7 @@
             <li><a href="http://127.0.0.1:5000/renter/reservations"><i class="fas fa-project-diagram"></i><strong>Reservations</a></strong></li>
             <li><a href="http://127.0.0.1:5000/reviewed/units"><i class="fas fa-star"></i>Reviewed Units</a></li>
             <li><a href="http://127.0.0.1:5000/rented/unit"><i class="fas fa-building"></i>Rented Unit</a></li>
+            <li><a href="http://127.0.0.1:5000/payment/receipt"><i class="fas fa-receipt"></i>Payment Receipts</a></li>
             <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
@@ -80,7 +81,7 @@
             </div>
             </div>
             {% if reservation.4=="WFOR"%}
-            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger" style="border-radius:10px;">Cancel</button></a>
+            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger" style="border-radius:20px;">Cancel</button></a>
             {% endif %}
             {% if reservation.4=="A"%}
             <div align="center" style="margin-left:20%;margin-right: 20%; ">
@@ -91,8 +92,8 @@
             {% endif%}
             {% endfor %}
             {% endfor %}
-            <a href="http://127.0.0.1:5000/confirm/reservation/{{reservation.2}}/{{reservation.1}}"><button class="btn btn-success float-left">Confirm</button></a>
-            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger float-right">Cancel</button></a>
+            <a href="http://127.0.0.1:5000/confirm/reservation/{{reservation.2}}/{{reservation.1}}"><button class="btn btn-success float-left" style="border-radius: 20px">Confirm</button></a>
+            <a href="http://127.0.0.1:5000/delete/reservation/{{reservation.2}}"><button class="btn btn-danger float-right" style="border-radius: 20px">Cancel</button></a>
             </div>
             <br>
             {% endif %}

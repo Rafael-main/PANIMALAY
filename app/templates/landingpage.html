@@ -12,7 +12,7 @@
   <header>
      <nav class="navbar" style="height: 5%;">
           <ul>
-          <li id="neon" class="nav-item" style="margin-right: 700px;position: static;">
+          <li id="neon" class="nav-item" style="margin-right: 650px;position: static;">
           <a href="/" style="color: white;font-size:20; font-family: 'baybayin rounded';"><strong><h2>P A N I M A L A Y</h2></strong></a>
           </li>
           {% if username is not defined %}
@@ -33,6 +33,7 @@
               <a class="dropdown-item" href="http://127.0.0.1:5000/renter/reservations">Reservations</a>
               <a class="dropdown-item" href="http://127.0.0.1:5000/reviewed/units">Reviewed Unit</a>
               <a class="dropdown-item" href="http://127.0.0.1:5000/rented/unit">Rented Unit</a>
+              <a class="dropdown-item" href="http://127.0.0.1:5000/payment/receipt">Payment Receipts</a>
               <a class="dropdown-item" href="http://127.0.0.1:5000/account">Manage Account</a>
               {% elif accountType == "owner" %}
               <a class="dropdown-item" href="http://127.0.0.1:5000/home">Home</a>
@@ -67,7 +68,7 @@
       <select class="form-control" id="unitType" name="unitType" required="1" >
         <option selected disabled>Select</option>
         <option value="Boarding House">Boarding House</option>
-        <option value="Appartment">Appartment</option>
+        <option value="Apartment">Apartment</option>
         <option value="Dorm">Dorm</option>
       </select>
      </li>
@@ -141,11 +142,11 @@
         </a>
       </div>
       <div class="column" style="margin-left: 1%;margin-right:1%">
-      <a href="http://127.0.0.1:5000/search/result/appartment" style="color: black">
+      <a href="http://127.0.0.1:5000/search/result/apartment" style="color: black">
       <div class="card" style="width: 15rem;">
         <img class="card-img-top" src="{{url_for('static', filename='images/signupbg.jpg')}}" alt="Card image cap">
         <div class="card-body">
-          <p class="card-text"><strong>Appartments</strong></p>
+          <p class="card-text"><strong>Apartments</strong></p>
           <small>Avg Rate/Month: P{{aveRates.1}}</small>
         </div>
       </div>
