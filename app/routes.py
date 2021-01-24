@@ -55,7 +55,6 @@ def login():
 			accountType = loginAccount.accountData(username)
 			session["username"] = username
 			session["accountType"] = accountType[3]
-			print(accountType[3])
 			acc = accounts.account()
 			data = acc.profileData(username)
 			if data[0][3]=="owner": 
@@ -245,7 +244,7 @@ def insertAccountAndProfile():
 
 @app.route("/home")
 def home():
-	if "username" in session:
+	if "username" in session and session["accountType"]=="owner":
 		username = session["username"]
 		acc = accounts.account()
 		prof= profiles.profile()
@@ -294,6 +293,10 @@ def home():
 		else:
 			RBdata = [0,0,0,0]
 			return render_template("home.html",RBdata=RBdata)
+
+	elif "username" in session and session["accountType"]=="renter":
+		return redirect(url_for("landingPage"))
+
 	else:
 		return redirect(url_for("signin"))
 	
@@ -1015,8 +1018,8 @@ def landingPageSearchResultForUnitType(unitType):
 	unitTypeArg = ""
 	if unitType=="boardinghouse":
 		unitTypeArg = "Boarding House"
-	elif unitType=="appartment":
-		unitTypeArg = "Appartment"
+	elif unitType=="apartment":
+		unitTypeArg = "Apartment"
 	else:
 		unitTypeArg = "Dorm"
 	allUnits = searchUnit.searchResultForUnitType(unitTypeArg)
@@ -1040,3 +1043,14 @@ def landingPageSearchResultForUnitType(unitType):
 	currentDate = datetime.today().strftime('%Y-%m-%d')
 	return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
 	
+@app.route("/payment/receipt")
+def paymentReceipt():
+	if "username" in session and session["accountType"]=="renter":
+		username = session["username"]
+		allRentersPayment = payments.newPayment()
+		unitsRented = allRentersPayment.searchUnitForPayment()
+		allRentersPayment = allRentersPayment.searchPaymentsForRenter(username)
+
+		return render_template("paymentreceipt.html",unitsRented=unitsRented,allRentersPayment=allRentersPayment,username=username)
+	else:
+		return redirect(url_for("signin"))

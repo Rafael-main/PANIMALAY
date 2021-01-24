@@ -43,7 +43,7 @@
         <form id="imagesInputForm" action="http://127.0.0.1:5000/upload/unit/images/{{username}}/{{unitID}}" method="POST" enctype="multipart/form-data">
           <input id="imagesInput" type="file" name="unitImages[]"  accept="image/png,image/jpg,image/jpeg" multiple required="1"
           oninvalid="this.setCustomValidity('Please select images')" oninput="setCustomValidity('')">
-          <button id="imagesInputFormSubmitButton" type="submit">Upload</button>
+          <button id="imagesInputFormSubmitButton" type="submit" style="border-radius: 20px">Upload</button>
         </form>
        </div>
        <hr>
@@ -56,7 +56,7 @@
         <br>
         <br>
         <div align="center">
-          <a  href="http://127.0.0.1:5000/delete/unit/image/{{unitID}}/{{image.0}}"><button class="btn btn-danger"><i class="fas fa-trash"></i></button></a>
+          <a  href="http://127.0.0.1:5000/delete/unit/image/{{unitID}}/{{image.0}}"><button class="btn btn-danger" style="border-radius: 20px"><i class="fas fa-trash"></i></button></a>
         </div>
        </div>
        <br>

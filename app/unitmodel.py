@@ -230,20 +230,20 @@ class newUnit():
 		allUnits = cur.fetchall()
 
 		sumRateForBoardingHouses = 0
-		sumRateForAppartments = 0
+		sumRateForApartments = 0
 		sumRateForDorms =  0 
 
 		numberOfBoardingHouses = 0 
-		numberOfAppartments = 0 
+		numberOfApartments = 0 
 		numberOfDorms = 0 
 
 		for unit in allUnits:
 			if unit[4] == "Boarding House":
 				sumRateForBoardingHouses+= int(unit[3])
 				numberOfBoardingHouses+=1
-			elif unit[4] =="Appartment":
-				sumRateForAppartments+= int(unit[3])
-				numberOfAppartments+=1
+			elif unit[4] =="Apartment":
+				sumRateForApartments+= int(unit[3])
+				numberOfApartments+=1
 			else:
 				sumRateForDorms+=int(unit[3])
 				numberOfDorms+=1
@@ -252,15 +252,15 @@ class newUnit():
 			aveRateForBoardingHouses =  sumRateForBoardingHouses/numberOfBoardingHouses
 		else:
 			aveRateForBoardingHouses = 0
-		if numberOfAppartments!=0:
-			aveRateForAppartments = sumRateForAppartments/numberOfAppartments
+		if numberOfApartments!=0:
+			aveRateForApartments = sumRateForApartments/numberOfApartments
 		else:
-			aveRateForAppartments = 0
+			aveRateForApartments = 0
 		if numberOfDorms!=0:
 			aveRateForDorms = sumRateForDorms/numberOfDorms
 		else:
 			aveRateForDorms
-		averages = [int(aveRateForBoardingHouses),int(aveRateForAppartments),int(aveRateForDorms)]
+		averages = [int(aveRateForBoardingHouses),int(aveRateForApartments),int(aveRateForDorms)]
 		return averages
 
 		
