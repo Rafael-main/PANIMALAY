@@ -64,7 +64,7 @@
 	        	
             </div>
             <div class="mt-4">
-             <p><strong>Location:</strong> {{selected_data['locations']['street']}}, {{selected_data['locations']['barangay']}}, {{selected_data['locations']['cityOrMunicipality']}}, {{selected_data['locations']['province']}}</p>
+             <p><strong>Location:</strong> <a href="http://127.0.0.1:5000/selected/unit/{{RBID}}/{{unitID}}#select_mapid">{{selected_data['locations']['street']}}, {{selected_data['locations']['barangay']}}, {{selected_data['locations']['cityOrMunicipality']}}, {{selected_data['locations']['province']}}</a></p>
              <p><strong>Email: </strong>{{selected_data['rental'].4}}</p>
              <p><strong>Contact No. </strong>{{selected_data['phonenumber']}}</p>
              <p><strong>Manage By:</strong> {{searchOwners.5}} {{searchOwners.6}}</p>
