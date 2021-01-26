@@ -9,12 +9,10 @@
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/renters_style.css')}}">
 </head>
 <body>
-
 <div class="wrapper">
     <div class="sidebar">
         <h2>PANIMALAY</h2>
         <ul>
-            <li><a href="http://127.0.0.1:5000/"><i class="fas fa-search"></i>Search</a></li>
             <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
             <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i>Manage Business</a></li>
@@ -25,106 +23,74 @@
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
     </div>
-
-        <div class="main_content">
-           <div id="rentersRecord">
+         <div class="main_content">
+           <div id="paymentRecord">
             <h4>Renters</h4>
           </div>
-          <div id="renterDataContainer" align="center">
+          <div id="rentersDataContainer">
             {% for info in rentersInfo %}
             {% if info.9 == RBID%}
-            <div class="card">
-              <div class="row">
-                <div id="profilePictureDiv" class="column" >
-                  <div>
-                    {% if checkProfilePicture(info.6)==true %}
-                    {% for picture in profilePictures%}
-                    {% if picture.0 == info.6 %}
-                    <img src="data:;base64,{{picture.3}}" style="height:150px;width:150px;border-radius:50%;margin-top:30px;margin-left:30px;margin-right: 30px;border: 1px solid black" alt="{{picture.2}}">
-                    {% endif %}
-                    {% endfor %}
-                    {% else %}
-                    <img src="{{url_for('static',filename='images/signinperson.png')}}" style="height:150px;width:150px;border-radius:50%;margin-top:30px;margin-left:30px;margin-right: 30px;border: 1px solid black">
-                    {% endif %}
-                  </div>
-                </div>
-                <div id="profileInfoDiv1" class="column">
-                  <br>
-                  <table>
-                    <tr>
-                    <th>Name:</th>
-                    <td>{{info.1}} {{info.2}}</td>
-                    </tr>
-                     <tr>
-                    <th>Username:</th>
-                    <td>{{info.0}}</td>
-                    </tr>
-                    <tr>
-                      <th>Gender:</th>
-                      <td>{{info.4}}</td>
-                    </tr>
-                    <tr>
-                      <th>Birth Date:</th>
-                      <td>{{info.3}}</td>
-                    </tr>
-                    <tr>
-                      <th>Email:</th>
-                      <td>{{info.5}}</td>
-                    </tr>
-                    <tr>
-                      <th>Contact no.:</th>
-                      <td>{{info.7}}</td>
-                    </tr>
-                    <tr>
-                      <th>Rented Unit:</th>
-                      <td>{{info.8}}</td>
-                    </tr>
-                    <tr>
-                      <th>Start Date:</th>
-                      <td>{{info.10}}</td>
-                    </tr>
-                    {% if info.11 == "C2"%}
-                    <tr>
-                      <th>Checkout Date:</th>
-                      <td>{{info.12}}</td>
-                    </tr>
-                    {% endif %}
-                    
-                  </table>
-                 
-                </div>
-              </div>
-              <br>
-                           
-              {% if info.11 == "L" %}
-              <div> 
-              <h5>This renter is requesting for your confirmation to leave his/her unit...</h5>
-              <a href="http://127.0.0.1:5000/confirm/request/to/leave/{{info.0}}/{{info.8}}"><button>Confirm</button></a>
-               <button data-toggle="modal" data-target="#cancelRequestToLeave{{info.0}}">Decline</button>
-              </div>
-              <div class="modal fade" id="cancelRequestToLeave{{info.0}}">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want decline this request to leave?</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <a href="http://127.0.0.1:5000/cancel/leave/{{info.0}}/{{info.8}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endif %}          
-             </div>
-          {% endif %}
-          {% endfor %}
-           </div>
-          </div>
-        </div>
+            <br>
+            <br>
+            <table class="table" id="renterTable">
+              <thead>
+                <tr>
+                  <th scope="col">name</th>
+                  <th scope="col">Renters Username</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Birthdate</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Contact No.</th>
+                  <th scope="col">Rented Unit</th>
+                  <th scope="col">Start Date</th>
+                  <th scope="col">Checkout Date</th>
+                  <th scope="col">Confrimation</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% if paymentRecord!=None %}
+                {% for payment in paymentRecord %}
+                <tr>
+                  <td>{{info.1}} {{info.2}}</td>
+                  <td>{{info.0}}</td>
+                  <td>{{info.4}}</td>
+                  <td>{{info.3}}</td>
+                  <td>{{info.5}}</td>
+                  <td>{{info.7}}</td>
+                  <td>{{info.10}}</td>
+                  <td>{{info.10}}</td>
+                  {% if info.11 == "C2"%}
+                  <td>{{info.12}}</td>
+                  {% endif %}
+                  <td>
+                    {% if info.11 == "L" %}
+                    <a href="http://127.0.0.1:5000/confirm/request/to/leave/{{info.0}}/{{info.8}}"><button class="btn btn-success">🗸</button></a>
+                       <button class="btn btn-danger" data-toggle="modal" data-target="#cancelRequestToLeave{{info.0}}">✘</button>
+                      </div>
+                      <div class="modal fade" id="cancelRequestToLeave{{info.0}}">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want decline this request to leave?</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <a href="http://127.0.0.1:5000/cancel/leave/{{info.0}}/{{info.8}}"><button type="button" class="btn btn-primary">Yes,proceed</button></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}          
+                     </div>
+                  {% endif %}
+                  {% endfor %}
+                  </td>
+                </tr>
+
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
