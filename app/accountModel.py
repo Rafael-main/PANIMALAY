@@ -1,4 +1,5 @@
 from app import app,mysql
+import hashlib
 
 class account():
 	def __init__(self,username=None,email=None,password=None,accountType=None):
@@ -20,8 +21,11 @@ class account():
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM accounts WHERE username=%s",(username,))
 		result = cur.fetchone()
-		if result is not None and len(result)!=0:
-			if password==result[2]:
+		if result is not None and len(result)!=0: 
+			str2hash = password
+			hashstr = hashlib.md5(str2hash.encode()) 
+			passcode= hashstr.hexdigest()
+			if passcode==result[2]:
 				return True
 			else:
 				return "Invalid password!"
@@ -87,5 +91,16 @@ class account():
 	@classmethod
 	def changePassword(cls,username,newPassword):
 		cur = mysql.connection.cursor()
-		cur.execute("UPDATE accounts SET password=%s WHERE username=%s",(newPassword,username))
+		cur.execute("UPDATE accounts SET password=MD5(%s) WHERE username=%s",(newPassword,username))
 		mysql.connection.commit()
+
+	@classmethod
+	def encryptPassword(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM accounts")
+		data = cur.fetchall()
+
+		for datum in data:
+			cur.execute("UPDATE accounts SET password=MD5(%s) WHERE username=%s",(datum[2],datum[0]))
+		mysql.connection.commit()
+

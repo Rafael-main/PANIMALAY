@@ -171,13 +171,14 @@ padding-right: 5%;
 }
 
 button {
+background-color: black;
 border: none;
 color: white;
-padding: 8px 14px;
+padding: 8px 30px;
 text-align: center;
 text-decoration: none;
 display: inline-block;
-margin: 1px 1px;
+margin: 2px 1px;
 cursor: pointer;
 font-size: 15px;
 border-radius: 16px;
