@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
 <html><li>
 <head>
 	<title>Panimalay</title></head>
-	<link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/font_style.css') }}">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/font_style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/selected_style.css') }}">
+  <link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
 
 </head>
 <body>
@@ -66,6 +67,7 @@
              <p><strong>Location:</strong> {{selected_data['locations']['street']}}, {{selected_data['locations']['barangay']}}, {{selected_data['locations']['cityOrMunicipality']}}, {{selected_data['locations']['province']}}</p>
              <p><strong>Email: </strong>{{selected_data['rental'].4}}</p>
              <p><strong>Contact No. </strong>{{selected_data['phonenumber']}}</p>
+             <p><strong>Manage By:</strong> {{searchOwners.5}} {{searchOwners.6}}</p>
               <div class="d-flex">
                 <div class="mr-auto">
                   <span><p>Room for {{selected_data['capacity']}} . {{selected_data['unitType']}} . 
@@ -257,8 +259,8 @@
                       </button>
                     </div>
                     <div class="modal-footer">
-                      <a href="http://127.0.0.1:5000/delete/feedback/{{unitID}}/{{RBID}}/{{feedback.2}}"><button type="button" class="btn btn-primary">Yes</button></a>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                      <a href="http://127.0.0.1:5000/delete/feedback/{{unitID}}/{{RBID}}/{{feedback.2}}"><button type="button" class="btn btn-primary" style="border-radius:20px;">Yes</button></a>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-radius:20px;">No</button>
                     </div>
                   </div>
                 </div>
@@ -493,9 +495,9 @@
                         </div>
                         <div>
                           {% if selected_data['searchResultAvailability']==true %}
-                          <span><p>Current status available</p></span>
+                          <span><p id="availability">Current status available</p></span>
                           {% else %}
-                          <span><p>Current status unavailable</p></span>
+                          <span><p id="availability">Current status unavailable</p></span>
                           {% endif %}
                         </div>
                         <div id="buttonAvailability">
@@ -552,16 +554,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="mr-auto btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-sm btn-primary">Reserve</button>
+        <button type="button" class="mr-auto btn btn-sm btn-secondary" data-dismiss="modal" style="border-radius:20px">Close</button>
+        <button type="submit" class="btn btn-sm btn-primary" style="border-radius:20px">Reserve</button>
       </div>
     </form>
     </div>
   </div>
 </div>
-
-<div style="max-width: 100vh; min-height: 500px; max-height: 1000px;"></div>
-
 
 <script type="text/javascript">
 var lat = "{{ selected_data['locations']['latitude'] | safe }}";
@@ -648,8 +647,30 @@ var coordinates = [lat,lng];
          $("#addFeedbackFormContainer").show();
       }
     
-    
+    var availability = $("#availability").html();
+    var accountType = {{accountType|tojson|safe}};
+    var genderaccom  = {{selected_data['genderAccommodation']|tojson|safe}};
+    var gender = {{gender|tojson|safe}};
+    if (availability.includes("unavailable")){
+      $("#reserve").submit(function(e){
+        e.preventDefault();
+        alert("Unit Unvailable");
+      })
+    }
+    if (accountType!=="renter"){
+       $("#reserve").submit(function(e){
+        e.preventDefault();
+        alert("Owners are prohibited to rent");
+      })
+    }
+    if (genderaccom!=="Unisex" and gender!==genderaccom){
+       $("#reserve").submit(function(e){
+        e.preventDefault();
+        alert("Opposite sex renters are prohibited in this unit");
+      })
+    }
     });
+
 </script>
 <script>
 var loc = {{selected_data['locationsForCoordinates']|safe}};

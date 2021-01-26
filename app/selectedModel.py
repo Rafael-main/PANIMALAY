@@ -120,7 +120,17 @@ class Search():
     	feedbacks = cur.fetchall()
     	return feedbacks
 	
-
+    @classmethod
+    def rentalsWithOwners(cls,rbid):
+        cur = mysql.connection.cursor()
+        cur.execute("SET @RBIDInput=%s",(rbid,))
+        cur.execute("""SELECT * FROM (SELECT rentalbusiness.ownersUserName,rentalbusiness.rbName,rentalbusiness.RBID,rentalbusiness.description,rentalbusiness.email,profiles.firstName,profiles.lastName
+        FROM rentalbusiness
+        INNER JOIN profiles ON profiles.username=rentalbusiness.ownersUserName) AS rentalsandowners
+        WHERE RBID=@RBIDInput;""")
+        data = cur.fetchone()
+        return data 
+        
     @classmethod
     def selectedRentalBusiness(cls,RBID):
         cur = mysql.connection.cursor()
