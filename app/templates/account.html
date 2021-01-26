@@ -16,6 +16,7 @@
         <h2>PANIMALAY</h2>
         <ul>
             {% if accountType =="owner" %}
+            <li><a href="http://127.0.0.1:5000/"><i class="fas fa-search"></i>Search</a></li>
             <li><a href="http://127.0.0.1:5000/home"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
             <li><a href="http://127.0.0.1:5000/manage/business"><i class="fas fa-tasks"></i>Manage Business</a></li>
@@ -25,6 +26,7 @@
             <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i><strong>Account</strong></a></li>
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
             {% else %}
+            <li><a href="http://127.0.0.1:5000/"><i class="fas fa-search"></i>Search</a></li>
             <li><a href="http://127.0.0.1:5000/profile"><i class="fas fa-id-card"></i>Profile</a></li>
             <li><a href="http://127.0.0.1:5000/renter/reservations"><i class="fas fa-project-diagram"></i>Reservations</a></li>
             <li><a href="http://127.0.0.1:5000/reviewed/units"><i class="fas fa-star"></i>Reviewed Units</a></li>

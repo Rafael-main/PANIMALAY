@@ -57,6 +57,7 @@ def login():
 			session["accountType"] = accountType[3]
 			acc = accounts.account()
 			data = acc.profileData(username)
+			session["gender"] = data[1][5]
 			if data[0][3]=="owner": 
 				return redirect(url_for('home'))
 			else:
@@ -234,11 +235,16 @@ def insertAccountAndProfile():
 		else:
 			newAccount.addAccount()
 			newProfile.addProfile(accountType,phoneNumber)
-			session["username"] = username
-			session["accountType"] = accountType
-			if accountType == "owner":
+
+			if accountType == "owner" or accountType=="Owner":
+				session["username"] = username
+				session["accountType"] = "owner"
+				session["gender"] = gender
 				return redirect(url_for('home'))
 			else:
+				session["username"] = username
+				session["accountType"] = "renter"
+				session["gender"] = gender
 				return redirect(url_for('landingPage'))
 			
 
@@ -280,8 +286,11 @@ def home():
 						sumOfStars+=f[4]
 
 
+			if len(ownedUnits)!=0:
+				averageRate = int(sumOfRate/len(ownedUnits))
+			else:
+				averageRate= 0 
 
-			averageRate = int(sumOfRate/len(ownedUnits))
 			if noOfFeedbacks!=0:
 				averageStarRating = sumOfStars/noOfFeedbacks
 			else:
@@ -745,7 +754,7 @@ def renters():
 					if p[0]==profileID:
 						flag = True
 				return flag
-			return render_template("renters.html",RBID=RBID,rentersInfo=rentersInfo,profilePictures=profilePicturesWithBlob,checkProfilePicture=checkProfilePicture)
+			return render_template("renters.html",RBID=RBID,rentersInfo=rentersInfo,profilePictures=profilePicturesWithBlob,checkProfilePicture=checkProfilePicture,username=username)
 		else:
 			return redirect(url_for("manageBusiness"))
 	else:
@@ -924,9 +933,10 @@ def reviewUnits():
 
 @app.route("/signout")
 def logout():
-	if "username" in session:
+	if ("username" in session) or ("accountType" in session) or ("gender" in session):
 		session.pop("username",None)
 		session.pop("accountType",None)
+		session.pop("gender",None)
 		return redirect(url_for("signin"))
 	else:
 		return redirect(url_for("signin"))	
@@ -936,6 +946,7 @@ def selected_unit(RBID,unitID):
 
 	res = searches.Search()
 	searchResultUnits = res.selectedSearchUnit(RBID, unitID)
+	searchOwners = res.rentalsWithOwners(RBID)
 	searchResultProtocols = res.selectedSearchProtocols(RBID, unitID)
 	searchResultServices = res.selectedSearchServices(RBID,unitID)
 	searchResultFacilities = res.selectedSearchFacilities(unitID)
@@ -957,8 +968,12 @@ def selected_unit(RBID,unitID):
 			imagesBlob.append([image[0],image[1],image[2],blob])
 	if "username" in session:
 		username = session["username"]
+		accountType = session["accountType"]
+		gender = session["gender"]
 	else:
 		username = "unknown"
+		accountType = "unknown"
+		gender = "unknown"
 
 	#calculate the average star rating
 	sumOfAllStar = 0
@@ -1009,7 +1024,7 @@ def selected_unit(RBID,unitID):
 				flag = True
 		return flag
 				
-	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username,checkProfilePicture=checkProfilePicture,profilePictures=profilePicturesWithBlob)
+	return render_template('selected.html', selected_data=searchResultUnits,RBID=RBID,unitID=unitID,username=username,checkProfilePicture=checkProfilePicture,profilePictures=profilePicturesWithBlob,accountType=accountType,gender=gender,searchOwners=searchOwners)
 
 
 @app.route("/search/result/<string:unitType>")
@@ -1054,3 +1069,8 @@ def paymentReceipt():
 		return render_template("paymentreceipt.html",unitsRented=unitsRented,allRentersPayment=allRentersPayment,username=username)
 	else:
 		return redirect(url_for("signin"))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404

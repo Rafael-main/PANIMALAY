@@ -12,7 +12,7 @@ $(document).ready(function(){
 			alert("Username must not contain special characters");
 		}
 
-		else if  ((/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/).test(firstName)){
+		else if  ((/[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/).test(firstName)){
 			e.preventDefault(e);
 			alert("First Name must not contain special characters");
 		}
