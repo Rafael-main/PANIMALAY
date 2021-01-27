@@ -700,8 +700,14 @@ def addFeedback(unitID,RBID):
 			feedBackandRatings = feedback.newFeedback(username,unitID,starRating,comment,feedbackDate)
 			feedBackandRatings.add()
 			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+		else:
+			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
 	else:
-		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+		if "username" in session and "accountType" in session:
+			username = session["username"]
+		else:
+			username ="unknown"
+		return render_template("signin.html",username=username)
 
 @app.route("/update/feedback/<string:unitID>/<string:RBID>/<int:feedbackNo>",methods=["POST"])
 def updateFeedback(unitID,RBID,feedbackNo):
@@ -1075,8 +1081,8 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
-@app.route("/testroute")
+''''@app.route("/testroute")
 def testRoute():
 	test = accounts.account()
 	test.encryptPassword()
-	return '<h1>Test</h1>'
+	return '<h1>Test</h1>' '''
