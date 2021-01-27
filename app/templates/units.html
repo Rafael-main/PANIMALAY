@@ -49,27 +49,25 @@
               <br>
               <a href="http://127.0.0.1:5000/add/unit/form"><button class="btn btn-success" style="border-radius: 20px">+ Add Unit</button></a>
             </div>
-            {% for unit in ownedUnits %}
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                      <img src="{{url_for('static',filename='images/room.png')}}" alt="Unit Images" width="250" height="250"> 
-                    </div>
-                    <div class="col-md-8">
-                      <div class="card-body">
-                        <span id="availableUnitIndicator" class="dot"></span>
-                        <h5 class="card-title">Unit ID: {{unit.1}}</h5>
-                        <p class="card-text">Rental Business: {{rbName}}</p>
-                        <p class="card-text"><small class="text-muted">Rate: {{unit.3}}</small></p>
-                       
-                        <a href="http://127.0.0.1:5000/update/unit/form/{{unit.1}}"><button class="btn btn-primary" style="border-radius: 20px">Update</button></a>
+            <table class="table" id="unitsTable">
+              <thead>
+                <tr>
+                  <th scope="col">Unit Name</th>
+                  <th scope="col">Rental Bussiness</th>
+                  <th scope="col">Rate</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for unit in ownedUnits %}
+                <tr>
+                  <td>{{unit.1}}</td>
+                  <td>{{rbName}}</td>
+                  <td>{{unit.3}}</td>
+                  <td><a href="http://127.0.0.1:5000/update/unit/form/{{unit.1}}"><button class="btn btn-primary" style="border-radius: 20px">Update</button></a>
                         <a href="http://127.0.0.1:5000/unit/gallery/{{unit.1}}"><button class="btn btn-warning" style="border-radius: 20px">Gallery</button></a>
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" style="border-radius: 20px">Delete</button>
-                        
-                    </div>
-                  </div>
-                </div>
-            </div>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" style="border-radius: 20px">Delete</button></td>
+
             <div id="deleteModal" class="modal fade" role="dialog">
               <div class="modal-dialog">
                   <div class="modal-content">
