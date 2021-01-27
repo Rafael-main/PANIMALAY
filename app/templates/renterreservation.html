@@ -23,6 +23,8 @@
             <li><a href="http://127.0.0.1:5000/account"><i class="fas fa-user-cog"></i>Account</a></li>
             <li><a href="{{url_for('logout')}}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul> 
+
+
     </div>
 
         <div class="main_content">
@@ -30,7 +32,7 @@
             <h4>Reservations</h4>
           </div>
           <div id="paymentDataContainer">
-            <div style="background-color: white;padding:50px;padding-bottom: 300px;">
+            <div style="background-color: white; ">
             <br>
             
             {% for reservation in allReservations %}
@@ -38,46 +40,60 @@
             {% for a in allUnits %}
             {% for r in rentalBusinesses %}
             {% if reservation.1 == a.1 and a.0 == r.2 %}
-            
 
+            <table class="table" id="renterTable">
+              <thead>
+                <tr>
 
-            <div style="border-radius: 10px;background-color:white;padding: 20px;border:1px solid black;">
-            {% for unit in allUnits %}
-            {% for rentalBusiness in rentalBusinesses %}
-            {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
-            <h5>Reservation to: {{rentalBusiness.1}}</h5>
-            {% endif%}
-            {% endfor %}
-            {% endfor %}
+                  <th scope="col">Reservation to</th>
+                  <th scope="col">Unit ID</th>
+                  <th scope="col">Reservation Date</th>
+                  <th scope="col">Unit Type</th>
+                  <th scope="col">Contact No.</th>
+                  <th scope="col">Capacity</th>
+                  <th scope="col">Rate</th>
+                  <th scope="col">Gender Accommodation</th>
+                  
+                  
+                </tr>
+              </thead>
+            <br>
             
-            <div class="row" style="padding:20px;">
-            <div class="column" style="margin-right: 100px;">
-            <h6>Unit ID: {{a.1}}</h6>
-            <h6>Reservation Date:{{reservation.3}} </h6>
-            <h6>Unit Type: {{a.4}}</h6>
-            {% for unit in allUnits %}
+            <tbody>
+                
+                <tr>
+                  
+                  {% for unit in allUnits %}
+                  {% for rentalBusiness in rentalBusinesses %}
+                  {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
+                  <td>{{rentalBusiness.1}}</td>
+                  {% endif%}
+                  {% endfor %}
+                  {% endfor %}
+                  <td>{{a.1}}</td>
+                  <td>{{reservation.3}}</td>
+                  <td>{{a.4}}</td>
+                  {% for unit in allUnits %}
             {% for rentalBusiness in rentalBusinesses %}
             {% if unit.1 == reservation.1 and unit.0==rentalBusiness.2%}
             {% for phoneNumber in phoneNumbers%}
             {% if rentalBusiness.2 == phoneNumber.0 %} 
-            <h6>Contact: {{phoneNumber.1}}</h6>
-            {% endif %}
+                  <td>{{phoneNumber.1}}</td>
+                  {% endif %}
             {%endfor %}
             {% endif%}
             {% endfor %}
             {% endfor %}
-
-            </div>
-            <div class="column">
-            <h6>Capacity: {{a.2}}</h6>
-            <h6>Rate:P{{a.3}}</h6>
-            <h6>Gender Accommodation:{{a.5}}</h6>
-            {% if reservation.4 =="WFOR"%}
-            <h6>Status: Waiting for the Owner's response</h6>
+                  <td>{{a.2}}</td>
+                  <td>P{{a.3}}</td>
+                  <td>{{a.5}}</td>
+                  {% if reservation.4 =="WFOR"%}
+                  <td>
+                      
             {% elif reservation.4 =="A"%}
-            <h6 style="color: green;">Status: Accepted </h6>
+            <h6 style="color: green; padding-left: 194px;">Status: Accepted </h6>
             {% elif reservation.4 =="D"%}
-             <h6 style="color: red">Status: Declined </h6>
+             <h6 style="color: red;padding-left: 194px;">Status: Declined </h6>
             {% endif %}
             </div>
             </div>
@@ -103,10 +119,13 @@
             {% endfor %}
             {% endif %}
             {% endfor %}
-            </div>
+                  </td>
+                </tr>
             </div>
           </div>
         </div>
+
+        
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
