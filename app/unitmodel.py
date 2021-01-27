@@ -263,5 +263,10 @@ class newUnit():
 		averages = [int(aveRateForBoardingHouses),int(aveRateForApartments),int(aveRateForDorms)]
 		return averages
 
-		
 
+	@classmethod
+	def searchAllFacilities(cls):
+		cur = mysql.connection.cursor()
+		cur.execute("SELECT * FROM facilities")
+		data = cur.fetchall()
+		return data

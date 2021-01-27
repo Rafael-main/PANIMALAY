@@ -1074,3 +1074,9 @@ def paymentReceipt():
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
+
+@app.route("/testroute")
+def testRoute():
+	test = accounts.account()
+	test.encryptPassword()
+	return '<h1>Test</h1>'
