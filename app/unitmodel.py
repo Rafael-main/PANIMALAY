@@ -268,5 +268,5 @@ class newUnit():
 	def searchAllFacilities(cls):
 		cur = mysql.connection.cursor()
 		cur.execute("SELECT * FROM facilities")
-		data = cur.fetchall()
-		return data
+		unitFacility = cur.fetchall()
+		return unitFacility

@@ -80,6 +80,7 @@ class Search():
         for res in result:
             srvc.append(res[1])
         return srvc
+        
     @classmethod
     def selectedSearchFacilities(cls, unit_id):
         cur = mysql.connection.cursor()
@@ -89,6 +90,7 @@ class Search():
         result = cur.fetchone()
         facilities = result[1].split(",")
         return facilities
+
     @classmethod
     def selectedSearchLocations(cls, unit_id):
         cur = mysql.connection.cursor()
