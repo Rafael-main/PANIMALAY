@@ -86,8 +86,6 @@ margin-top: 50px;
 
 .wrapper .main_content .header{
 padding: 20px;
-background: #fff;
-color: #717171;
 border-bottom: 1px solid #e0e4e8;
 }
 
@@ -185,4 +183,7 @@ border-radius: 16px;
 }
 button:hover {
 background-color: gray;
+}
+#renterTable{
+  margin-right: 50px;
 }
