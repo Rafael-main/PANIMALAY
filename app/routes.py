@@ -618,6 +618,7 @@ def searchResult():
 		rentalBusinesses = searchUnit.searchAllRentalBusiness()
 		unitLocations = searchUnit.searchAllUnitLocation()
 		unitImages = searchUnit.searchAllUnitImages()
+		unitFacility = searchUnit.searchAllFacilities()
 		imagesBlob = []
 		imageChecker = len(unitImages)
 		if imageChecker!=0:
@@ -629,9 +630,9 @@ def searchResult():
 			username = session["username"]
 			accountType = session["accountType"]
 			currentDate = datetime.today().strftime('%Y-%m-%d')
-			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+			return render_template("searchResult.html", allUnits=allUnits, unitFacility = unitFacility,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
 		else:
-			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
+			return render_template("searchResult.html",unitFacility = unitFacility, allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),unitFacilityJSON=json.dumps(unitFacility),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
 	else:
 		if "username" in session and "accountType" in session:
 			username = session["username"]
@@ -652,6 +653,7 @@ def redirectSearch():
 		rentalBusinesses = searchUnit.searchAllRentalBusiness()
 		unitLocations = searchUnit.searchAllUnitLocation()
 		unitImages = searchUnit.searchAllUnitImages()
+		unitFacility = searchUnit.searchAllFacilities()
 		imagesBlob = []
 		imageChecker = len(unitImages)
 		if imageChecker!=0:
@@ -663,9 +665,9 @@ def redirectSearch():
 			username = session["username"]
 			accountType = session["accountType"]
 			currentDate = datetime.today().strftime('%Y-%m-%d')
-			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+			return render_template("searchResult.html", allUnits=allUnits,unitFacility = unitFacility,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),unitFacilityJSON=json.dumps(unitFacility),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
 		else:
-			return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
+			return render_template("searchResult.html",unitFacility = unitFacility, allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations))	
 	else:
 		if "username" in session and "accountType" in session:
 			username = session["username"]
@@ -700,8 +702,14 @@ def addFeedback(unitID,RBID):
 			feedBackandRatings = feedback.newFeedback(username,unitID,starRating,comment,feedbackDate)
 			feedBackandRatings.add()
 			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+		else:
+			return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
 	else:
-		return	redirect(url_for("selected_unit",RBID=RBID,unitID=unitID))
+		if "username" in session and "accountType" in session:
+			username = session["username"]
+		else:
+			username ="unknown"
+		return render_template("signin.html",username=username)
 
 @app.route("/update/feedback/<string:unitID>/<string:RBID>/<int:feedbackNo>",methods=["POST"])
 def updateFeedback(unitID,RBID,feedbackNo):
@@ -1040,6 +1048,8 @@ def landingPageSearchResultForUnitType(unitType):
 	allUnits = searchUnit.searchResultForUnitType(unitTypeArg)
 	rentalBusinesses = searchUnit.searchAllRentalBusiness()
 	unitLocations = searchUnit.searchAllUnitLocation()
+	unitFacility = searchUnit.searchAllFacilities()
+
 
 	unitImages = searchUnit.searchAllUnitImages()
 	imagesBlob = []
@@ -1056,7 +1066,40 @@ def landingPageSearchResultForUnitType(unitType):
 	else:
 		username= "unknown"
 	currentDate = datetime.today().strftime('%Y-%m-%d')
-	return render_template("searchResult.html",allUnits=allUnits,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+	return render_template("searchResult.html",allUnits=allUnits,unitFacility = unitFacility,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),unitFacilityJSON=json.dumps(unitFacility),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
+
+@app.route("/search/result/tileview/<string:unitType>")
+def tileViewSearchResultForUnitType(unitType):
+	searchUnit = unit.newUnit()
+	unitTypeArg = ""
+	if unitType=="boardinghouse":
+		unitTypeArg = "Boarding House"
+	elif unitType=="apartment":
+		unitTypeArg = "Apartment"
+	else:
+		unitTypeArg = "Dorm"
+	allUnits = searchUnit.searchResultForUnitType(unitTypeArg)
+	rentalBusinesses = searchUnit.searchAllRentalBusiness()
+	unitLocations = searchUnit.searchAllUnitLocation()
+	unitFacility = searchUnit.searchAllFacilities()
+
+
+	unitImages = searchUnit.searchAllUnitImages()
+	imagesBlob = []
+	imageChecker = len(unitImages)
+	if imageChecker!=0:
+		for image in unitImages:
+			blob  = base64.b64encode(image[3])
+			blob = blob.decode("UTF-8")
+			imagesBlob.append([image[0],image[1],image[2],blob])
+	accountType = ""
+	if "username" in session and "accountType" in session:
+		username = session["username"]
+		accountType = session["accountType"]
+	else:
+		username= "unknown"
+	currentDate = datetime.today().strftime('%Y-%m-%d')
+	return render_template("searchresulttileview.html",allUnits=allUnits,unitFacility = unitFacility,rentalBusinesses=rentalBusinesses,unitLocations=unitLocations,imagesBlob=imagesBlob,allUnitsJSON=json.dumps(allUnits),unitFacilityJSON=json.dumps(unitFacility),rentalBusinessesJSON=json.dumps(rentalBusinesses),unitLocationsJSON=json.dumps(unitLocations),username=username,accountType=accountType,currentDate=currentDate)
 	
 @app.route("/payment/receipt")
 def paymentReceipt():
@@ -1075,8 +1118,14 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
-@app.route("/testroute")
+''''@app.route("/testroute")
 def testRoute():
 	test = accounts.account()
 	test.encryptPassword()
-	return '<h1>Test</h1>'
+	return '<h1>Test</h1>' '''
+
+@app.route("/testroute")
+def test():
+	test = unit.newUnit()
+	Test = test.searchAllFacilities()
+	return '<h1>'+str(Test)+'</h1>'

@@ -13,7 +13,7 @@
    	crossorigin="">
    	</script>
    	<link rel="shortcut icon" type="text/css" href="{{url_for('static',filename='images/house.png')}}">
-   	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/searchresult_style.css')}}">
+   	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/searchresult_tileview_style.css')}}">
 </head>
 <body>
   <header>
@@ -134,56 +134,55 @@
     </div>
   </div>
 </div>
-
-{% if (allUnits|length)!=0  %}
 <br>
-<a href="/search/result/tileview/<string:unitType>">
-    <button type="button" class="btn btn-dark" style="margin-left: 100px;"><i class="fa fa-th"></i></button>
+<a href="/search/result/<string:unitType>">
+    <button type="button" class="btn btn-dark" style="margin-left: 100px;"><i class="fa fa-map"></i></button>
   </a>
-<div id="resultContainer" class="container-sm">
-<div class="row">
-  	<div id="unitsContainer" class="column" style="background-color:#aaa;">
-	   <h2>Units</h2>
-	   {% for unit in allUnits %}
-	    <div class="card" style="width: 26rem;">
-	    	<br>
-	    	<div class="card-body">
-				  {% set unitImages = [] %}
-				  {% for image in imagesBlob %}
-				  {% if image.0 == unit.0 %}
-				  {% set appendImage =  unitImages.append(image) %}
-				  {% endif %}
-				  {% endfor %}
-				  {% if (unitImages|length)!=0 %}
-				<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-				  <ol class="carousel-indicators">
-				  	 {% for i in unitImages %}
-				    <li data-target="#carouselExampleIndicators" data-slide-to="{{loop.index - 1}}"{% if loop.index==1 %}class="active"{% endif %}></li>
-				     {% endfor %}
-				  </ol>
-				  <div class="carousel-inner">
-				  	{% for i in unitImages %}
-				     <div class="carousel-item{% if loop.index==1 %} active{% endif %}">
-				      <img class="d-block w-100" src="data:;base64,{{i.3}}" style="max-height:100px;" alt="{{i.2}}">
-				    </div>
-				     {% endfor %}
-				  </div>
-				  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				    <span class="sr-only">Previous</span>
-				  </a>
-				  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-				    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-				    <span class="sr-only">Next</span>
-				  </a>
-				</div>
-				{% else %}
-				<img class="d-block w-100" src="{{url_for('static',filename='images/noimageavailable.jpg')}}" style="max-height:100%px;border-radius:20px;">
-				{% endif %}
-				{% for business in rentalBusinesses %}
-				{% if business.2 == unit.1 %}
-	    		<h5 class="card-title">{{business.1}}</h5>
-	    		<p class="card-text"><h6 class="card-text" style="color: green">P{{unit.3}}</h6></p>
+  <br>
+  <br>
+<h2 style="margin-left: 100px;">Units </h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 container-sm" style="margin-left: 100px;">
+     {% if (allUnits|length)!=0  %}
+     {% for unit in allUnits %}
+      <div class="card" style="width: 26rem; height: 30rem;" >
+        <br>
+        <div class="card-body">
+          {% set unitImages = [] %}
+          {% for image in imagesBlob %}
+          {% if image.0 == unit.0 %}
+          {% set appendImage =  unitImages.append(image) %}
+          {% endif %}
+          {% endfor %}
+          {% if (unitImages|length)!=0 %}
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+             {% for i in unitImages %}
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{loop.index - 1}}"{% if loop.index==1 %}class="active"{% endif %}></li>
+             {% endfor %}
+          </ol>
+          <div class="carousel-inner">
+            {% for i in unitImages %}
+             <div class="carousel-item{% if loop.index==1 %} active{% endif %}">
+              <img class="d-block w-100" src="data:;base64,{{i.3}}" style="max-height:100px;" alt="{{i.2}}">
+            </div>
+             {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        {% else %}
+        <img class="d-block w-100" src="{{url_for('static',filename='images/noimageavailable.jpg')}}" style="max-height:20%px;border-radius:20px;">
+        {% endif %}
+        {% for business in rentalBusinesses %}
+        {% if business.2 == unit.1 %}
+          <h5 class="card-title">{{business.1}}</h5>
+          <p class="card-text"><h6 class="card-text" style="color: green">P{{unit.3}}</h6></p>
           <div class="d-flex">
           {% for facility in unitFacility %}
           {%if facility.0 == unit.0%}
@@ -225,14 +224,15 @@
                 {% endfor%}
                 </div>
           {% endif %}
-          {% endfor %}	    		
-	    		<a href="http://127.0.0.1:5000/selected/unit/{{unit.1}}/{{unit.0}}" class="btn btn-primary" style="border-radius: 50px" target="_blank"><i class="fas fa-eye">View Info</i></a>
+          {% endfor %}          
+          <a href="http://127.0.0.1:5000/selected/unit/{{unit.1}}/{{unit.0}}" class="btn btn-primary" style="border-radius: 50px" target="_blank"><i class="fas fa-eye">View Info</i></a>
 
-	    		<button id="{{unit.0}}" onClick="mark(this.id)" class="btn btn-info"  style="border-radius: 50px"><i class="fas fa-map-marker-alt">Locate</i></button>
-	    		<button class="btn btn-success" style="border-radius: 50px" data-toggle="modal" data-target="#reservationModal{{unit.0}}">Book Now</button>
+          <button id="{{unit.0}}" onClick="mark(this.id)" class="btn btn-info"  style="border-radius: 50px"><i class="fas fa-map-marker-alt">Locate</i></button>
+          <button class="btn btn-success" style="border-radius: 50px" data-toggle="modal" data-target="#reservationModal{{unit.0}}">Book Now</button>
 
-	    	</div>
-	    </div>
+        </div>
+
+</div>
 <div id="reservationModal{{unit.0}}" class="modal fade" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -245,18 +245,18 @@
     <div class="modal-body">
       <form action="{{url_for('addReservation',unitID=unit.0)}}" method="POST">
        <div align="center">
-       	<h5 style="color:gray">
-       		{% for r in rentalBusinesses %}
-       		{% if r.2 == unit.1 %}
-       		{{r.1}}
-       		{% endif %}
-       		{%endfor%}
-       	</h5>
-       	<br>
-       	<h6 style="color: gray">Booking Date:{{currentDate}}</h6>
-       	<h6 style="color: gray">Unit Rate:P{{unit.3}}/month</h6>
-       	 </div>
-       	
+        <h5 style="color:gray">
+          {% for r in rentalBusinesses %}
+          {% if r.2 == unit.1 %}
+          {{r.1}}
+          {% endif %}
+          {%endfor%}
+        </h5>
+        <br>
+        <h6 style="color: gray">Booking Date:{{currentDate}}</h6>
+        <h6 style="color: gray">Unit Rate:P{{unit.3}}/month</h6>
+         </div>
+        
         <button type="submit" class="btn btn-primary float-left" style="margin-left: 50px;border-radius: 50px">Reserve</button>
         <button type="button" class="btn btn-secondary float-right" data-dismiss="modal" style="margin-right: 50px;border-radius: 50px">Cancel</button>
       </form>
@@ -265,75 +265,61 @@
     </div>
   </div>
 </div>
-	    {% endfor %}
-	</div>
-  <div id="mapContainer" class="column"></div>
+      {% endfor %}
+  </div>
 </div>
 </div>
 {% else %}
 <div id="resultContainer" class="container-sm">
-	<h1>No units available. Please search unit first...</h1>
+  <h1>No units available. Please search unit first...</h1>
 </div>
 {% endif %}
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script>
 
-	var locations = {{allUnitsJSON|safe}};
-	var map = L.map('mapContainer').setView([10.566233,120.262634],5);
-	mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-	L.tileLayer(
-    	'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-   		 attribution: '&copy; ' + mapLink + ' Contributors',
-    	maxZoom: 18,
-    	}).addTo(map);
-
-	for (var i = 0; i < locations.length; i++) {
-		marker = new L.marker([locations[i][7],locations[i][8]])
-		.bindPopup(locations[i][13])
-		.addTo(map);
-	}
-  
 
     function mark(clicked_id){
-	      var id = clicked_id;
-	      var locations = {{unitLocationsJSON|safe}};
-	      for (let i=0;i<locations.length;i++){
-	      	var location = locations[i];
-	      	if (location[0]===id){
-	      		var latitude = location[2];
-	      		var longitude = location[3];
-	      		map.flyTo([parseFloat(latitude),parseFloat(longitude)], 15);
-	      	}
+        var id = clicked_id;
+        var locations = {{unitLocationsJSON|safe}};
+        for (let i=0;i<locations.length;i++){
+          var location = locations[i];
+          if (location[0]===id){
+            var latitude = location[2];
+            var longitude = location[3];
+            map.flyTo([parseFloat(latitude),parseFloat(longitude)], 15);
+          }
 
-	      }
-	  }
+        }
+    }
 </script>
 <script>
-	function increment() {
+  function increment() {
     document.getElementById('capacityModalInput').stepUp();
    }
    function decrement() {
-   	document.getElementById('capacityModalInput').stepDown();
+    document.getElementById('capacityModalInput').stepDown();
    }
    function updateTextInput(val) {
-   	document.getElementById('textInput').value=val; 
+    document.getElementById('textInput').value=val; 
     }
 
    const
-   	range = document.getElementById('range'),
-   	rangeV = document.getElementById('rangeV'),
-   	setValue = ()=>{
-   		const
-   		newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
-   		newPosition = 10 - (newValue * 0.2);
-   		rangeV.innerHTML = `<span>${range.value}</span>`;
-   		rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
-   	};
-   	document.addEventListener("DOMContentLoaded", setValue);
-   	range.addEventListener('input', setValue)
+    range = document.getElementById('range'),
+    rangeV = document.getElementById('rangeV'),
+    setValue = ()=>{
+      const
+      newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
+      newPosition = 10 - (newValue * 0.2);
+      rangeV.innerHTML = `<span>${range.value}</span>`;
+      rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+    };
+    document.addEventListener("DOMContentLoaded", setValue);
+    range.addEventListener('input', setValue)
 
 </script>
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
