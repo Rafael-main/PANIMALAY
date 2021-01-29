@@ -31,33 +31,39 @@
           </div>
           <div id="paymentReceiptDataContainer">
 
+            <table class="table" id="renterTable">
+              <thead>
+                <tr>
+                  <th scope="col">Payment Number</th>
+                  <th scope="col">Payment Date</th>
+                  <th scope="col">Recieved From</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Recieved By</th>
+                  <th scope="col">Rent For</th>
+                  
+                </tr>
+              </thead>
+            <br>
             {% for payment in allRentersPayment%}
             {% if payment.0==username%}
             {% for unit in unitsRented %}
             {% if unit.0 == payment.5 %}
-            <div style="margin: 2%;border: 1px solid black;border-style: dotted solid;background-color: white;">
-              <div class="row" style="margin:20px;">
-               <div class="column" style="width: 30%"><p><strong>Payment No:</strong> {{payment.2}}</p></div>
-               <div class="column" style="width: 40%"></div>
-               <div class="column" style="width: 30%"><p><strong>Payment Date:</strong> {{payment.4}}</p></div>
-              </div>
-              <div align="center"><h5>PAYMENT RECEIPT</h5></div>
-              <div class="row" style="margin-top:20px;margin-bottom: 20px;margin-left:40px;margin-right: 40px;">
-               <div class="column" style="width: 50%"><p><strong>Receieved From:</strong> {{payment.0}}</p></div>
-               <div class="column" style="width: 10%"></div>
-               <div class="column" style="width: 40%"><p><strong>Amount:</strong> P{{payment.3}}</p></div>
-              </div>
-              <div class="row" style="margin-top:20px;margin-bottom: 20px;margin-left:40px;margin-right: 40px;">
-               <div class="column" style="width: 50%"><p><strong>Receieve By:</strong> {{unit.6}}</p></div>
-               <div class="column" style="width: 10%"></div>
-               <div class="column" style="width: 40%"><p><strong>Rent for:</strong> {{unit.0}}</p></div>
-              </div>
-            </div>
-            {% endif %}
+            <tbody>
+                
+                <tr>
+                
+                  <td>{{payment.2}}</td>
+                  <td>{{payment.4}}</td>
+                  <td>{{payment.0}}</td>
+                  <td>P{{payment.3}}</td>
+                  <td>{{unit.6}}</td>
+                  <td>{{unit.0}}</td>
+                  
+
+                  {% endif %}
             {% endfor %}
             {% endif %}
             {% endfor %}
-        
           </div>
 </div>
 </div>
