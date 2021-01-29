@@ -31,39 +31,7 @@
             <h4>Reservations</h4>
           </div>
          <div id="paymentDataContainer">
-            <div style="background-color: white;padding:50px;padding-bottom: 200px;">
-            <ul>
-            <li>
-              <h6>Accepted</h6>
-            </li>
-            <li>
-              <div class="rectangle" style="background-color:#b0ffbe;height:20px;width: 50px;border:1px solid black"></div>
-            </li>
-            <ul>
-            <li>
-              <h6>Declined</h6>
-            </li>
-            <li>
-              <div class="rectangle" style="background-color:#ffbaad;height:20px;width: 50px;border:1px solid black"></div>
-            </li>
-            </ul>
-            <ul>
-            <li>
-              <h6>Waiting for Response</h6>
-            </li>
-            <li>
-              <div class="rectangle" style="background-color:#c4fffd;height:20px;width: 50px;border:1px solid black"></div>
-            </li>
-            <li>
-              <h6>Confirmed</h6>
-            </li>
-            <li>
-              <div class="rectangle" style="background-color:white;height:20px;width: 50px;border:1px solid black"></div>
-            </li>
-
-            </ul>
-            
-
+            <div style="background-color: white;padding:50px;padding-bottom: 200px;">            
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category,message in messages %}
@@ -116,9 +84,9 @@
                   <td>{{unit.5}}</td>
         <td>
             {% if reservation.4=="WFOR"%}
-            <div align="center" style="margin-left:20%;margin-right: 20%; ">
-            <a href="http://127.0.0.1:5000/accept/reservation/{{reservation.2}}"><button class="btn btn-success float-left" style="border-radius: 20px">Accept</button></a>
-            <a href="http://127.0.0.1:5000/decline/reservation/{{reservation.2}}"><button class="btn btn-danger float-right" style="border-radius: 20px">Decline</button></a>
+            <div align="center" >
+            <a href="http://127.0.0.1:5000/accept/reservation/{{reservation.2}}"><button class="btn btn-success float-left" style="border-radius: 20px; margin-left:20%;margin-right: 20%; ">Accept</button></a>
+            <a  href="http://127.0.0.1:5000/decline/reservation/{{reservation.2}}"><button class="btn btn-danger float-right" style="border-radius: 20px; margin-right: 5%;">Decline</button></a>
             </div>
         </td>
             <br>
