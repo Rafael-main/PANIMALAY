@@ -8,6 +8,6 @@ SECRET_KEY="tothinkistheprogrammersmantra"
 
 DB_NAME = "resources"
 DB_HOST = "localhost"
-DB_USERNAME = "markjason"
-DB_PASSWORD = "1234"
+DB_USERNAME = "root"
+DB_PASSWORD = "december3131-"
 
